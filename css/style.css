@@ -3,10 +3,10 @@
 }
 
 body {
-  /*THIS MAX WIDTH PROPERTY IS NOT WORKING*/
   position: relative;
   max-width: 960px;
   margin: 0 auto;
+  font-family: sans-serif;
 }
 
 h1 {
@@ -16,13 +16,32 @@ h1 {
 }
 
 p {
+  display: none;
+  /*display: block;*/
+  padding: 25px 0;
+  font-size: 25px;
+}
+
+p:first-child {
   /*display: none;*/
-  display: inline-block;
-  padding: 30px;
+  float: left;
+  padding: 23px 0 22px 25px;
+  text-align: left;
+  font-size: 15px;
 }
 
 p:nth-child(2) {
-  display: none;
+  /*display: none;*/
+  width: 73%;
+  float: left;
+  margin: 0 auto;
+}
+
+p:nth-child(3) {
+  /*display: none;*/
+  float: right;
+  padding-right: 25px;
+  padding-top: 26px;
 }
 
 .game-board {

@@ -4,10 +4,11 @@
 
 //SCORE variables
 var score = 0;
+var highScore = [];
 var lives = 3;
 
 //Variable for color array
-var colors = ['red', 'yellow'];
+var colors = ['red', 'yellow', 'green'];
 
 //Variables for the central dot
 var progressColorCounter = 0;
@@ -51,7 +52,7 @@ function startDotInterval() {
 function changeDotColor() {
   $('.center-dot').css('background', colors[progressColorCounter]).attr('value', colors[progressColorCounter]);
   //Progress colors index at random
-  progressColorCounter = Math.floor(Math.random() * (colors.length - 1));
+  progressColorCounter = Math.floor(Math.random() * (colors.length));
   //Reassign a random number between 2 seconds and 12 seconds
   randomIntervals = Math.floor(Math.random() * 10000) + 2000;
 }
@@ -92,13 +93,20 @@ function checkColor(e) {
   if ($(e.target).attr('value') === $('.center-dot').attr('value')) {
     console.log(`Clicked value: ${$(e.target).attr('value')}`, `Center Dot: ${$('.center-dot').attr('value')}`, 'YAY');
     score++;
+    $('#score').html(score);
     $(e.target).remove();
   } else {
     console.log(`Clicked value: ${$(e.target).attr('value')}`, `Center Dot: ${$('.center-dot').attr('value')}`, 'OH NO');
+    $(`#life-${lives}`).remove();
     lives--;
     $(e.target).remove();
     if (lives === 0) {
       console.log('Game OVER');
+      highScore.push(score);
+      highScore.sort(function(a, b) {
+        return a-b;
+      });
+      $('#highest-score').html(highScore[highScore.length - 1]);
     }
   }
 }
@@ -109,7 +117,7 @@ function init() {
   $('.start-button').on('click', () => {
     $('.start-button').css('display', 'none');
     $('.center-dot').css('display', 'inline-block');
-    $('p:nth-child(1)').css('display', 'inline-block');
+    $('p').css('display', 'block');
     startDotInterval();
     setTimeout(appearBubbles, 2000);
     //JUST A TIMER TO CHECK THINGS
