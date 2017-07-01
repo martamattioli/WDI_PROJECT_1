@@ -8,6 +8,7 @@
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
     <script src="js/app.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
@@ -15,7 +16,13 @@
       <h1>WDI PROJECT 1</h1>
     </header>
     <div class="borders">
-      <p id="score" >SCORE</p>
+      <p>SCORE: <span id="score">0</span></p>
+      <p>HIGHEST SCORE: <span id="highest-score"></span></p>
+      <p>
+        <span class="lives" id="life-1">&hearts;</span>
+        <span class="lives" id="life-2">&hearts;</span>
+        <span class="lives" id="life-3">&hearts;</span>
+      </p>
       <div class="game-board">
         <div class="center-dot"></div>
         <div class="start-button">START</div>

@@ -109,6 +109,7 @@ function init() {
   $('.start-button').on('click', () => {
     $('.start-button').css('display', 'none');
     $('.center-dot').css('display', 'inline-block');
+    $('p:nth-child(1)').css('display', 'inline-block');
     startDotInterval();
     setTimeout(appearBubbles, 2000);
     //JUST A TIMER TO CHECK THINGS

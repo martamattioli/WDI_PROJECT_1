@@ -9,6 +9,22 @@ body {
   margin: 0 auto;
 }
 
+h1 {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 30px;
+}
+
+p {
+  /*display: none;*/
+  display: inline-block;
+  padding: 30px;
+}
+
+p:nth-child(2) {
+  display: none;
+}
+
 .game-board {
   background: #eeeeee;
   width: 80%;
@@ -21,8 +37,9 @@ body {
 
 .borders {
   background: #bdc3c7;
+  text-align: center;
   width: 90%;
-  height: 800px;
+  height: 650px;
   z-index: 0;
   position: absolute;
   left: 50%;
