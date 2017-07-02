@@ -63,8 +63,8 @@ function changeDotColor() {
 function stopIntervals() {
   console.log('stopIntervals() has fired');
   clearInterval(dotColors);
-  // dotColors = 0;
   clearInterval(bubbleIntervals);
+  // dotColors = 0;
   // bubbleIntervals = 0;
 }
 
@@ -198,6 +198,7 @@ function checkColor(e) {
     $(e.target).remove();
 
     if (lives === 0) {
+      $('.bubble').off('click');
       gameOver();
     }
   }
