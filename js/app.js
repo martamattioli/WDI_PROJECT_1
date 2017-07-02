@@ -59,6 +59,60 @@ function changeDotColor() {
   randomIntervals = Math.floor((Math.random() * (10000 - 2000 + 1)) + 2000);
 }
 
+//Stop intervals when game is OVER
+function stopIntervals() {
+  console.log('stopIntervals() has fired');
+  clearInterval(dotColors);
+  // dotColors = 0;
+  clearInterval(bubbleIntervals);
+  // bubbleIntervals = 0;
+}
+
+//GAME OVER
+function gameOver() {
+  console.log('Game OVER');
+
+  highScore.push(score);
+  console.log(`High score array: ${highScore}`);
+
+  //reset score to 0
+  setTimeout(function() {
+    score = 0;
+    $('#score').html(score);
+  }, 1000);
+
+  //reset lives to 3 and make hearts appear again
+  lives = 3;
+  setTimeout(function() {
+    $(`.lives`).fadeIn();
+  }, 2000);
+
+  // highScore.sort(function(a, b) {
+  //   return a-b;
+  // });
+  highScore.sort();
+  console.log(`High score array after sort: ${highScore}`);
+  //display high score - do not reset it
+  $('#highest-score').html(highScore[highScore.length - 1]);
+
+  //Make board disappear and make game over message appear
+  $('.container').fadeOut('slow');
+  $('.game-over').fadeIn('slow');
+
+  //Stop intervals
+  stopIntervals();
+
+  //If user clicks on PLAY AGAIN BUTTON
+  $('.play-again').on('click', () => {
+    //Make game over message disappear and game board appear
+    $('.game-over').fadeOut('slow');
+    $('.container').fadeIn('slow');
+    //Reactivate intervals for bubbles and center-dot
+    startDotInterval();
+    setTimeout(appearBubbles, 2000);
+  });
+}
+
 //Intervals for various bubbles
 //Make bubbles appear on the screen on set intervals
 // !!!!!!!!!!!! MAKE THE 2000 TURN INTO INCREASING SPEED OF FILL UP
@@ -89,7 +143,7 @@ function addBubbles() {
   // }
 
   var bubbleColor = colors[Math.floor(Math.random() * (colors.length))];
-  $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).fadeIn(3000).appendTo('.game-board').css({
+  $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).fadeIn(1000).appendTo('.game-board').css({
     'left': xCoordinate,
     'top': yCoordinate,
     'background-color': bubbleColor,
@@ -110,7 +164,7 @@ function addBubbles() {
 
   //Fade out and remove divs
   setTimeout(function() {
-    $(`#${timerIds}`).fadeOut(3000);
+    $(`#${timerIds}`).fadeOut(1000);
     setTimeout( function() {
       $(`#${removeDiv}`).remove();
       removeDiv++;
@@ -120,48 +174,31 @@ function addBubbles() {
   bubbleIds++;
 
   //Add event listener to IDs --> if value of center-dot === value of clicked item, success // else game over
-  $('.bubble').one('click', checkColor);
+  $('.bubble').on('click', checkColor);
 
   //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
   randomFreq = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
 }
 
 function checkColor(e) {
+  $(e.target).off('click');
   if ($(e.target).attr('value') === $('.center-dot').attr('value')) {
-    console.log(`Clicked value: ${$(e.target).attr('value')}`, `Center Dot: ${$('.center-dot').attr('value')}`, 'YAY');
+    console.log(`clickedVal: ${$(e.target).attr('value')}`, `dotVal: ${$('.center-dot').attr('value')}`, 'YAY');
     score++;
-    console.log(score);
+    console.log(`Score: ${score}`);
+    // console.log(`Lives: ${lives}`);
     $('#score').html(score);
     $(e.target).remove();
   } else {
-    console.log(`Clicked value: ${$(e.target).attr('value')}`, `Center Dot: ${$('.center-dot').attr('value')}`, 'OH NO');
+    console.log(`clickedVal: ${$(e.target).attr('value')}`, `dotVal: ${$('.center-dot').attr('value')}`, 'OH NO');
     $(`#life-${lives}`).fadeOut();
     lives--;
+    console.log(`Score: ${score}`);
+    // console.log(`Lives: ${lives}`);
     $(e.target).remove();
+
     if (lives === 0) {
-      console.log('Game OVER');
-      highScore.push(score);
-      highScore.sort(function(a, b) {
-        return a-b;
-      });
-      //display high score - do not reset it
-      $('#highest-score').html(highScore[highScore.length - 1]);
-      //reset lives to 3 and make hearts appear again
-      lives = 3;
-      $(`.lives`).fadeIn();
-      //reset score to 0
-      score = 0;
-      //Stop intervals
-      
-      //Make board disappear and make game over message appear
-      $('.game-board').fadeOut('slow');
-      $('.game-over').fadeIn('slow');
-      $('.play-again').on('click', () => {
-        //Make game over message disappear and game board appear
-
-        //Reactivate intervals for bubbles and center-dot
-
-      });
+      gameOver();
     }
   }
 }
