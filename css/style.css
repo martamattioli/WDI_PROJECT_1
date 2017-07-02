@@ -45,6 +45,7 @@ p:nth-child(3) {
 }
 
 .game-board {
+  /*display: none;*/
   background: #eeeeee;
   width: 80%;
   height: 500px;
@@ -102,4 +103,28 @@ p:nth-child(3) {
   position: fixed;
   z-index: 0;
   overflow: hidden;
+}
+
+/*GAME OVER STYLING*/
+h2 {
+  font-size: 40px;
+  /*line-height: 600px;*/
+}
+
+.game-over {
+  display: none;
+  background: pink;
+  height: 650px;
+  padding-top: 220px;
+}
+
+.game-over h2, .game-over div {
+  padding: 20px 30px;
+}
+
+.game-over .play-again {
+  margin-top: 30px;
+  background-color: red;
+  display: inline-block;
+  border-radius: 4px;
 }
