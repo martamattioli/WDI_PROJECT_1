@@ -1,7 +1,3 @@
-// When user clicks START, the button disappears
-// In place there is a circle in the middle
-// Every random seconds the circle changes color
-
 //SCORE variables
 var score = 0;
 var highScore = [];
