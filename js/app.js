@@ -45,6 +45,7 @@ function yPositionExclude50() {
 
 //Intervals for the central dot
 function startDotInterval() {
+  clearInterval(dotColors);
   dotColors = setInterval(changeDotColor, randomIntervals);
 }
 
@@ -103,7 +104,7 @@ function gameOver() {
   lives = 3;
   setTimeout(function() {
     $(`.lives`).fadeIn();
-  }, 2000);
+  }, 1000);
 
   // highScore.sort(function(a, b) {
   //   return a-b;
@@ -111,7 +112,7 @@ function gameOver() {
   highScore.sort();
   console.log(`High score array after sort: ${highScore}`);
   //display high score - do not reset it
-  $('#highest-score').html(highScore[highScore.length - 1]);
+  $('#highest-score').html(highScore[0]);
 
   //Make board disappear and make game over message appear
   $('.container').fadeOut('slow');
@@ -141,6 +142,7 @@ function gameOver() {
 //Make bubbles appear on the screen on set intervals
 // !!!!!!!!!!!! MAKE THE 2000 TURN INTO INCREASING SPEED OF FILL UP
 function appearBubbles() {
+  clearInterval(bubbleIntervals);
   bubbleIntervals = setInterval(addBubbles, randomFreq);
 }
 
@@ -226,6 +228,14 @@ function checkColor(e) {
       gameOver();
     }
   }
+
+  if (score === 5) {
+    levelOne();
+  } else if (score === 10) {
+    levelTwo();
+  } else if (score === 13) {
+    levelThree();
+  }
 }
 
 function init() {
@@ -240,10 +250,6 @@ function init() {
     $('p').css('display', 'block');
     startDotInterval();
     setTimeout(appearBubbles, 2000);
-
-    setTimeout(levelOne, 20000);
-    setTimeout(levelTwo, 30000);
-    setTimeout(levelThree, 40000);
     //JUST A TIMER TO CHECK THINGS
     // var startTimer = 0;
     // setInterval(function() {
