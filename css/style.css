@@ -16,32 +16,46 @@ h1 {
 }
 
 p {
-  display: none;
+  /*display: none;*/
   /*display: block;*/
   padding: 25px 0;
   font-size: 25px;
 }
 
-p:first-child {
-  /*display: none;*/
+.high-score {
+  display: none;
   float: left;
-  padding: 23px 0 22px 25px;
+  padding: 23px 25px 22px 25px;
   text-align: left;
   font-size: 15px;
 }
 
-p:nth-child(2) {
+/*p:nth-child(2) {
   /*display: none;*/
-  width: 73%;
+  /*width: 73%;*/
+  /*text-align: center;
   float: left;
   margin: 0 auto;
+}*/
+
+.score-div {
+  display: none;
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 25px;
+}
+
+.score-div p {
+  padding: 0;
+  text-align: center;
 }
 
 p:nth-child(3) {
-  /*display: none;*/
+  display: none;
   float: right;
-  padding-right: 25px;
-  padding-top: 26px;
+  padding: 26px 25px 26px 25px;
 }
 
 .game-board {
@@ -103,6 +117,18 @@ p:nth-child(3) {
   position: fixed;
   z-index: 0;
   overflow: hidden;
+}
+
+/*PAUSE STYLING*/
+.pause {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 45%;
+  padding: 20px;
+  background: green;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /*GAME OVER STYLING*/

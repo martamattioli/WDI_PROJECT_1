@@ -26,9 +26,13 @@ var bubbleIds = 0;
 var timerIds = 0;
 var removeDiv = 0;
 
+//PAUSE GAME
+var gamePaused = false;
+
+//Postion values of bubbles
 function xPositionExclude50() {
   xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
-  if (xCoordinate >= 47 && xCoordinate <= 53) {
+  if (xCoordinate >= 40 && xCoordinate <= 55) {
     yPositionExclude50();
   } else {
     return xCoordinate;
@@ -37,7 +41,7 @@ function xPositionExclude50() {
 
 function yPositionExclude50() {
   yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
-  if (yCoordinate >= 47 && yCoordinate <= 53) {
+  if (yCoordinate >= 40 && yCoordinate <= 55) {
     yPositionExclude50();
   } else {
     return yCoordinate;
@@ -262,9 +266,28 @@ function init() {
     $('.start-button').css('display', 'none');
     $('.center-dot').css('display', 'inline-block');
     $('p').css('display', 'block');
+    $('.score-div').css('display', 'block');
+    $('#pause-game').css('display', 'block');
     $('.center-dot').css('background', colors[progressColorCounter]).attr('value', colors[progressColorCounter]);
     startDotInterval();
     setTimeout(appearBubbles, 2000);
+  });
+
+  $('#pause-game').on('click', () => {
+    if (gamePaused === false) {
+      //stop the interval
+      clearInterval(dotColors);
+      clearInterval(bubbleIntervals);
+      gamePaused = true;
+      console.log(gamePaused, 'the game should pause');
+    } else {
+      console.log(gamePaused, 'before reactivate interval');
+      // reactivate interval
+      startDotInterval();
+      appearBubbles();
+      gamePaused = false;
+      console.log(gamePaused, 'the game should reactivate');
+    }
   });
 }
 
