@@ -156,6 +156,10 @@ function gameOver() {
     //Reset the colors array back to the original colors:
     colors = ['red', 'yellow', 'green'];
 
+    //Reset lives and score
+    lives = 3;
+    score = 0;
+
     //Reset reandomFreq back to how it was before the levels advance
     randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
 
@@ -207,18 +211,6 @@ function addBubbles() {
   yCoordinate = `${yPositionExclude50()}%`;
 
   //Fade out and remove divs
-  // setTimeout(function() {
-  //   $(`#${timerIds}`).fadeOut(2000);
-  //   setTimeout( function() {
-  //     //If click event doesn't happen --> remove a life
-  //     if (lives > 0) {
-  //       checkClickEvent();
-  //     }
-  //     $(`#${removeDiv}`).remove();
-  //     removeDiv++;
-  //   }, 3000);
-  //   timerIds++;
-  // }, 4000);
   timeOutBubble = setTimeout(disappearBubbles, 4000);
   bubbleIds++;
 
@@ -265,6 +257,9 @@ function checkColor(e) {
 
     if (lives === 0) {
       $('.bubble').off('click');
+      clearInterval(dotColors);
+      clearInterval(bubbleIntervals);
+      lives = 3;
       gameOver();
     }
   }
