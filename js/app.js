@@ -22,6 +22,7 @@ var yCoordinate = `${yPositionExclude50()}%`;
 //Bubble intervals variables
 var bubbleIntervals;
 var randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
+var timeOutBubble;
 var bubbleIds = 0;
 var timerIds = 0;
 var removeDiv = 0;
@@ -174,6 +175,23 @@ function appearBubbles() {
   bubbleIntervals = setInterval(addBubbles, randomFreq);
 }
 
+//Function to make bubbles disappear after 4 seconds
+function disappearBubbles() {
+  if (gamePaused === true) {
+    clearTimeout(timeOutBubble);
+  }
+  $(`#${timerIds}`).fadeOut(2000);
+  setTimeout( function() {
+    //If click event doesn't happen --> remove a life
+    if (lives > 0) {
+      checkClickEvent();
+    }
+    $(`#${removeDiv}`).remove();
+    removeDiv++;
+  }, 3000);
+  timerIds++;
+}
+
 function addBubbles() {
   var bubbleColor = colors[Math.floor(Math.random() * (colors.length))];
   $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).fadeIn(1000).appendTo('.game-board').css({
@@ -189,18 +207,19 @@ function addBubbles() {
   yCoordinate = `${yPositionExclude50()}%`;
 
   //Fade out and remove divs
-  setTimeout(function() {
-    $(`#${timerIds}`).fadeOut(2000);
-    setTimeout( function() {
-      //If click event doesn't happen --> remove a life
-      if (lives > 0) {
-        checkClickEvent();
-      }
-      $(`#${removeDiv}`).remove();
-      removeDiv++;
-    }, 3000);
-    timerIds++;
-  }, 4000);
+  // setTimeout(function() {
+  //   $(`#${timerIds}`).fadeOut(2000);
+  //   setTimeout( function() {
+  //     //If click event doesn't happen --> remove a life
+  //     if (lives > 0) {
+  //       checkClickEvent();
+  //     }
+  //     $(`#${removeDiv}`).remove();
+  //     removeDiv++;
+  //   }, 3000);
+  //   timerIds++;
+  // }, 4000);
+  timeOutBubble = setTimeout(disappearBubbles, 4000);
   bubbleIds++;
 
   //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
