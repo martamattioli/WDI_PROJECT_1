@@ -74,6 +74,20 @@ function levelThree() {
   console.log(colors);
 }
 
+//If click event hasn't fired
+function checkClickEvent() {
+  if ($(`#${timerIds}`).attr('value') === $('.center-dot').attr('value')) {
+    $(`#life-${lives}`).fadeOut();
+    lives--;
+    console.log(`lives if click hasn't happened: ${lives}`);
+    if (lives === 0) {
+      $('.bubble').off('click');
+      stopIntervals();
+      gameOver();
+    }
+  }
+}
+
 //Stop intervals when game is OVER
 function stopIntervals() {
   console.log('stopIntervals() has fired');
@@ -174,6 +188,10 @@ function addBubbles() {
   setTimeout(function() {
     $(`#${timerIds}`).fadeOut(2000);
     setTimeout( function() {
+      //If click event doesn't happen --> remove a life
+      if (lives > 0) {
+        checkClickEvent();
+      }
       $(`#${removeDiv}`).remove();
       removeDiv++;
     }, 3000);
@@ -192,9 +210,6 @@ function addBubbles() {
     //freq at level 3
     randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
   }
-
-
-  console.log(`The score is... ${score}`);
 }
 
 function checkColor(e) {
@@ -241,9 +256,6 @@ function checkColor(e) {
 }
 
 function init() {
-  // for (var i = 0; i < 100; i++) {
-  //   console.log(Math.floor((Math.random() * (80 - 10 + 1)) + 10));
-  // }
   // When user clicks START, the button disappears
   // In place there is a circle in the middle
   $('.start-button').on('click', () => {
@@ -253,12 +265,6 @@ function init() {
     $('.center-dot').css('background', colors[progressColorCounter]).attr('value', colors[progressColorCounter]);
     startDotInterval();
     setTimeout(appearBubbles, 2000);
-    //JUST A TIMER TO CHECK THINGS
-    // var startTimer = 0;
-    // setInterval(function() {
-    //   console.log(startTimer);
-    //   startTimer++;
-    // }, 1000);
   });
 }
 
