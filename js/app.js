@@ -26,7 +26,7 @@ var timerIds = 0;
 var removeDiv = 0;
 
 function xPositionExclude50() {
-  xCoordinate = Math.floor((Math.random() * (80 - 10 + 1)) + 20);
+  xCoordinate = Math.floor((Math.random() * (80 - 20)) + 20);
   if (xCoordinate >= 47 && xCoordinate <= 53) {
     yPositionExclude50();
   } else {
@@ -35,7 +35,7 @@ function xPositionExclude50() {
 }
 
 function yPositionExclude50() {
-  yCoordinate = Math.floor((Math.random() * (80 - 10 + 1)) + 20);
+  yCoordinate = Math.floor((Math.random() * (80 - 20)) + 20);
   if (yCoordinate >= 47 && yCoordinate <= 53) {
     yPositionExclude50();
   } else {
@@ -174,7 +174,7 @@ function addBubbles() {
     'top': yCoordinate,
     'background-color': bubbleColor,
     'padding': Math.floor((Math.random() * (30 - 10 + 1)) + 10)
-  });
+  }).one('click', checkColor);
   //!!!!!!! SOMETIMES XCOORDINATE AND Y COORDINATE ARE UNDEFINED... WHY??
   // console.log(xCoordinate, yCoordinate);
 
@@ -200,18 +200,34 @@ function addBubbles() {
   bubbleIds++;
 
   //Add event listener to IDs --> if value of center-dot === value of clicked item, success // else game over
-  $('.bubble').on('click', checkColor);
+  // $('.bubble').one('click', checkColor);
 
   //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
-  randomFreq = Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000;
+  if (score < 5) {
+    //freq at level 1
+    randomFreq = Math.floor((Math.random() * (2000 - 1000 + 1)) + 1000);
+  } else if (score >= 5 && score < 10) {
+    //freq at level 2
+    randomFreq = Math.floor((Math.random() * (1200 - 800 + 1)) + 800);
+  } else {
+    //freq at level 3
+    randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
+  }
+
+
+  console.log(`The score is... ${score}`);
 }
 
 function checkColor(e) {
   $(e.target).off('click');
   if ($(e.target).attr('value') === $('.center-dot').attr('value')) {
-    console.log(`clickedVal: ${$(e.target).attr('value')}`, `dotVal: ${$('.center-dot').attr('value')}`, 'YAY');
+    console.log(`clickedVal: ${$(e.target).attr('id')}`, `dotVal: ${$('.center-dot').attr('value')}`, 'YAY');
+
+    // score.push($(e.target).attr('id'));
     score++;
-    console.log(`Score: ${score}`);
+
+    // console.log(`Score: ${score}`);
+    console.log(score);
     // console.log(`Lives: ${lives}`);
     $('#score').html(score);
     $(e.target).remove();
@@ -248,6 +264,7 @@ function init() {
     $('.start-button').css('display', 'none');
     $('.center-dot').css('display', 'inline-block');
     $('p').css('display', 'block');
+    $('.center-dot').css('background', colors[progressColorCounter]).attr('value', colors[progressColorCounter]);
     startDotInterval();
     setTimeout(appearBubbles, 2000);
     //JUST A TIMER TO CHECK THINGS
