@@ -10,7 +10,7 @@ var colors = ['red', 'yellow', 'green'];
 //Variables for the central dot
 var progressColorCounter = 0;
 var dotColors;
-var randomIntervals = Math.floor(Math.random() * (10000 - 2000 + 1)) + 2000;
+var randomIntervals = Math.floor((Math.random() * (10000 - 2000 + 1)) + 2000);
 
 //Bubbles positioning
 // !!!!!!! Not sure why, but sometimes it gives me undefined %
@@ -20,13 +20,13 @@ var yCoordinate = `${yPositionExclude50()}%`;
 
 //Bubble intervals variables
 var bubbleIntervals;
-var randomFreq = Math.floor((Math.random() * (2000 - 1000 + 1)) + 1000);
+var randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
 var bubbleIds = 0;
 var timerIds = 0;
 var removeDiv = 0;
 
 function xPositionExclude50() {
-  xCoordinate = Math.floor((Math.random() * (80 - 20)) + 20);
+  xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (xCoordinate >= 47 && xCoordinate <= 53) {
     yPositionExclude50();
   } else {
@@ -35,7 +35,7 @@ function xPositionExclude50() {
 }
 
 function yPositionExclude50() {
-  yCoordinate = Math.floor((Math.random() * (80 - 20)) + 20);
+  yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (yCoordinate >= 47 && yCoordinate <= 53) {
     yPositionExclude50();
   } else {
@@ -85,6 +85,13 @@ function stopIntervals() {
   // bubbleIntervals = 0;
 }
 
+//To sort high score array
+function sortHighscore() {
+  highScore.sort(function(a, b){
+    return a-b;
+  });
+}
+
 //GAME OVER
 function gameOver() {
   console.log('Game OVER');
@@ -93,6 +100,10 @@ function gameOver() {
 
   highScore.push(score);
   console.log(`High score array: ${highScore}`);
+  sortHighscore();
+  console.log(`High score array after sort: ${highScore}`);
+  //display high score - do not reset it
+  $('#highest-score').html(highScore[highScore.length - 1]);
 
   //reset score to 0
   setTimeout(function() {
@@ -106,13 +117,8 @@ function gameOver() {
     $(`.lives`).fadeIn();
   }, 1000);
 
-  // highScore.sort(function(a, b) {
-  //   return a-b;
-  // });
-  highScore.sort();
-  console.log(`High score array after sort: ${highScore}`);
-  //display high score - do not reset it
-  $('#highest-score').html(highScore[0]);
+  //Reset the colors array back to the original colors:
+  colors = ['red', 'yellow', 'green'];
 
   //Make board disappear and make game over message appear
   $('.container').fadeOut('slow');
@@ -127,11 +133,15 @@ function gameOver() {
 
   //If user clicks on PLAY AGAIN BUTTON
   $('.play-again').on('click', () => {
+    //Reset the colors array back to the original colors:
+    colors = ['red', 'yellow', 'green'];
+
+    //Reset reandomFreq back to how it was before the levels advance
+    randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
+
     //Make game over message disappear and game board appear
     $('.game-over').fadeOut('slow');
     $('.container').fadeIn('slow');
-    //Reset the colors array back to the original colors:
-    colors = ['red', 'yellow', 'green'];
     //Reactivate intervals for bubbles and center-dot
     startDotInterval();
     setTimeout(appearBubbles, 2000);
@@ -140,34 +150,12 @@ function gameOver() {
 
 //Intervals for various bubbles
 //Make bubbles appear on the screen on set intervals
-// !!!!!!!!!!!! MAKE THE 2000 TURN INTO INCREASING SPEED OF FILL UP
 function appearBubbles() {
   clearInterval(bubbleIntervals);
   bubbleIntervals = setInterval(addBubbles, randomFreq);
 }
 
 function addBubbles() {
-  // var xCoordinate = `${xPositionExclude50()}%`;
-  // var yCoordinate = `${yPositionExclude50()}%`;
-  //
-  // function xPositionExclude50() {
-  //   xCoordinate = Math.floor((Math.random() * ((100 - paddingNow) - paddingNow + 1)) + paddingNow);
-  //   if (xCoordinate >= 47 && xCoordinate <= 53) {
-  //     yPositionExclude50();
-  //   } else {
-  //     return xCoordinate;
-  //   }
-  // }
-  //
-  // function yPositionExclude50() {
-  //   yCoordinate = Math.floor((Math.random() * ((100 - paddingNow) - paddingNow + 1)) + paddingNow);
-  //   if (yCoordinate >= 47 && yCoordinate <= 53) {
-  //     yPositionExclude50();
-  //   } else {
-  //     return yCoordinate;
-  //   }
-  // }
-
   var bubbleColor = colors[Math.floor(Math.random() * (colors.length))];
   $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).fadeIn(1000).appendTo('.game-board').css({
     'left': xCoordinate,
@@ -178,37 +166,27 @@ function addBubbles() {
   //!!!!!!! SOMETIMES XCOORDINATE AND Y COORDINATE ARE UNDEFINED... WHY??
   // console.log(xCoordinate, yCoordinate);
 
-  //!!!!!! with paddingNow, I'm trying to make sure that the cicles don't go out of the light grey box -->
-  //the problem now is that at some point something break, but I'm not sure what... the console logs start to go mental
-  // console.log(`Log padding: ${parseFloat($(`#${bubbleIds}`).css('padding').slice(0, -2))}`);
-  // console.log(`Log posX: ${xPositionExclude50()}%; Log posY: ${yPositionExclude50()}%;`);
-  // var getBubblepadding = parseFloat($(`#${bubbleIds}`).css('padding').slice(0, -2));
-  // paddingNow = getBubblepadding * 2;
-
   xCoordinate = `${xPositionExclude50()}%`;
   yCoordinate = `${yPositionExclude50()}%`;
 
   //Fade out and remove divs
   setTimeout(function() {
-    $(`#${timerIds}`).fadeOut(1000);
+    $(`#${timerIds}`).fadeOut(2000);
     setTimeout( function() {
       $(`#${removeDiv}`).remove();
       removeDiv++;
     }, 3000);
     timerIds++;
-  }, 3000);
+  }, 4000);
   bubbleIds++;
-
-  //Add event listener to IDs --> if value of center-dot === value of clicked item, success // else game over
-  // $('.bubble').one('click', checkColor);
 
   //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
   if (score < 5) {
     //freq at level 1
-    randomFreq = Math.floor((Math.random() * (2000 - 1000 + 1)) + 1000);
+    randomFreq = Math.floor((Math.random() * (1200 - 1000 + 1)) + 800);
   } else if (score >= 5 && score < 10) {
     //freq at level 2
-    randomFreq = Math.floor((Math.random() * (1200 - 800 + 1)) + 800);
+    randomFreq = Math.floor((Math.random() * (1000 - 600 + 1)) + 600);
   } else {
     //freq at level 3
     randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
