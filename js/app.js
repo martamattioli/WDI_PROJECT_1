@@ -2,6 +2,7 @@
 var score = 0;
 var highScore = [];
 var lives = 3;
+var pointsInARow = 0;
 
 //Variable for color array
 var colorsNextLevels = ['pink', 'blue', 'white'];
@@ -200,15 +201,19 @@ function checkColor(e) {
   $(e.target).off('click');
   if ($(e.target).attr('value') === $('.center-dot').attr('value')) {
     console.log(`clickedVal: ${$(e.target).attr('id')}`, `dotVal: ${$('.center-dot').attr('value')}`, 'YAY');
-
-    // score.push($(e.target).attr('id'));
     score++;
-
-    // console.log(`Score: ${score}`);
-    console.log(score);
-    // console.log(`Lives: ${lives}`);
     $('#score').html(score);
     $(e.target).remove();
+
+    //If the user made 10 points in a row and their lives are less than 3 --> add one life
+    pointsInARow++;
+    console.log(`pointsInARow: ${pointsInARow}`);
+    if (lives < 3 && pointsInARow === 10) {
+      lives++;
+      $(`#life-${lives}`).fadeIn();
+    } else if (lives === 3 && pointsInARow === 10) {
+      pointsInARow = 0;
+    }
   } else {
     console.log(`clickedVal: ${$(e.target).attr('value')}`, `dotVal: ${$('.center-dot').attr('value')}`, 'OH NO');
     $(`#life-${lives}`).fadeOut();
@@ -216,6 +221,9 @@ function checkColor(e) {
     console.log(`Score: ${score}`);
     // console.log(`Lives: ${lives}`);
     $(e.target).remove();
+
+    //If user makes a mistake, reset points in a row:
+    pointsInARow = 0;
 
     if (lives === 0) {
       $('.bubble').off('click');
