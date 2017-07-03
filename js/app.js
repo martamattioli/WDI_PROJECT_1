@@ -4,6 +4,7 @@ var highScore = [];
 var lives = 3;
 
 //Variable for color array
+var colorsNextLevels = ['pink', 'blue', 'white'];
 var colors = ['red', 'yellow', 'green'];
 
 //Variables for the central dot
@@ -19,7 +20,7 @@ var yCoordinate = `${yPositionExclude50()}%`;
 
 //Bubble intervals variables
 var bubbleIntervals;
-var randomFreq = Math.floor((Math.random() * (3000 - 1000 + 1)) + 1000);
+var randomFreq = Math.floor((Math.random() * (2000 - 1000 + 1)) + 1000);
 var bubbleIds = 0;
 var timerIds = 0;
 var removeDiv = 0;
@@ -55,9 +56,28 @@ function changeDotColor() {
   randomIntervals = Math.floor((Math.random() * (10000 - 2000 + 1)) + 2000);
 }
 
+//Add levels to the game:
+function levelOne() {
+  colors.push(colorsNextLevels[0]);
+  console.log(colors);
+}
+
+function levelTwo() {
+  colors.push(colorsNextLevels[1]);
+  console.log(colors);
+}
+
+function levelThree() {
+  colors.push(colorsNextLevels[2]);
+  console.log(colors);
+}
+
 //Stop intervals when game is OVER
 function stopIntervals() {
   console.log('stopIntervals() has fired');
+  clearTimeout(levelOne);
+  clearTimeout(levelTwo);
+  clearTimeout(levelThree);
   clearInterval(dotColors);
   clearInterval(bubbleIntervals);
   // dotColors = 0;
@@ -67,6 +87,8 @@ function stopIntervals() {
 //GAME OVER
 function gameOver() {
   console.log('Game OVER');
+  colors.splice(3);
+  console.log(colors);
 
   highScore.push(score);
   console.log(`High score array: ${highScore}`);
@@ -98,11 +120,17 @@ function gameOver() {
   //Stop intervals
   stopIntervals();
 
+  setTimeout(function() {
+    $('.play-again').fadeIn('slow').css('display', 'inline-block');
+  }, 2000);
+
   //If user clicks on PLAY AGAIN BUTTON
   $('.play-again').on('click', () => {
     //Make game over message disappear and game board appear
     $('.game-over').fadeOut('slow');
     $('.container').fadeIn('slow');
+    //Reset the colors array back to the original colors:
+    colors = ['red', 'yellow', 'green'];
     //Reactivate intervals for bubbles and center-dot
     startDotInterval();
     setTimeout(appearBubbles, 2000);
@@ -173,7 +201,7 @@ function addBubbles() {
   $('.bubble').on('click', checkColor);
 
   //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
-  randomFreq = Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000;
+  randomFreq = Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000;
 }
 
 function checkColor(e) {
@@ -212,6 +240,10 @@ function init() {
     $('p').css('display', 'block');
     startDotInterval();
     setTimeout(appearBubbles, 2000);
+
+    setTimeout(levelOne, 20000);
+    setTimeout(levelTwo, 30000);
+    setTimeout(levelThree, 40000);
     //JUST A TIMER TO CHECK THINGS
     // var startTimer = 0;
     // setInterval(function() {
