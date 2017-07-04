@@ -81,10 +81,12 @@ main {
 
 .start-area {
   display: none;
+  /*opacity: 0;*/
   background: gold;
   background: white;
   padding-left: 0!important;
   padding-right: 0!important;
+  -webkit-animation-duration: 1.3s;
 }
 
 .start-area button, .start-area a {

@@ -1,7 +1,6 @@
 var viewportHeight = $(window).height();
 var headerHeight = viewportHeight * 0.12;
-var bodyHeight = viewportHeight * 0.9;
-var startAreaPadding = (bodyHeight - 91) / 2;
+var bodyHeight = viewportHeight * 0.88;
 var otherAreaHeight = viewportHeight * 0.15;
 var boardHeight = viewportHeight - headerHeight - otherAreaHeight - 20;
 
@@ -17,9 +16,6 @@ function init() {
   //Main
   $('main').height(viewportHeight * 0.9);
 
-  //Start Area
-  $('.start-area').height(bodyHeight).css('padding', `${startAreaPadding}`);
-
   //Game Area
   $('.game-area').height(bodyHeight).css('padding', `${headerPadding}`);
 
@@ -27,7 +23,6 @@ function init() {
   var pauseBtnHeight = $('#pause').outerHeight();
   var otherAreaPadding = (otherAreaHeight - pauseBtnHeight) / 2;
 
-  console.log(pauseBtnHeight);
   $('.other-area').height(otherAreaHeight).css('padding', `${otherAreaPadding}`);
 
   $('.game-board').height(boardHeight);
@@ -39,6 +34,7 @@ function init() {
   $('.instructions-area').height(bodyHeight).css('padding', `${(bodyHeight - 25 - getInstructionsHeight - 51) / 2}`);
 
   //ANIMATE TITLE ON LOAD
+  //Each letter bouces
   let counter = 0;
   const $spanArray = $('h1 span');
   const titleInterval = setInterval(function() {
@@ -52,8 +48,21 @@ function init() {
       clearInterval(titleInterval);
     }
   }, 200);
+  //Then the title goes to the top and the start area comes in
+  setTimeout(function() {
+    $('h1').animate({marginTop: '0%'}, 1000);
+    setTimeout(function() {
+      $('.start-area').css('display', 'block').addClass('animated bounceInUp');
+      //Start Area
+      var startBtnHeight = $('.start-area button').outerHeight();
+      var instructionsLinkHeight = $('.start-area a').outerHeight();
+      var startAreaPadding = (bodyHeight - startBtnHeight - instructionsLinkHeight) / 2;
 
-  setTimeout(function())
+      $('.start-area').height(bodyHeight).css('padding', `${startAreaPadding}`);
+    }, 1000);
+  }, 3000);
+
+  
 }
 
 $(init);
