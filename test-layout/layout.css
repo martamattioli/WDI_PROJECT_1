@@ -5,16 +5,16 @@
 .container {
   background: silver;
   background: white;
-  max-width: 600px;
+  /*max-width: 600px;*/
   margin: 0 auto;
 }
 
 /**** BASIC TYPOGRAPHY ****/
-h1, h2, h3, button, a, li, p {
+h1, h2, h3, button, a, span, p {
   font-family: 'Quicksand', sans-serif;
 }
 
-h1, h2, h3, .start-area button {
+h1, h2, h3, .start-area button, .center-dot span {
   font-weight: bold;
 }
 
@@ -33,6 +33,32 @@ h1 {
   font-size: 30px;
   text-align: center;
 }
+
+h1 span {
+  display: inline-block;
+}
+
+.o {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.red {
+  background: red;
+}
+.blue {
+  background: blue;
+}
+.yellow {
+  background: yellow;
+}
+
+header h3, header h1 {
+  display: inline-block;
+  width: 32.8%;
+}
+
 
 /**** BODY AREA ****/
 main {
@@ -77,18 +103,21 @@ main {
 
 /* SCORING and OTHER OPTIONS DIVS */
 .scoring-area {
+  max-width: 80%;
+  margin: 0 auto;
   padding-left: 0!important;
   padding-right: 0!important;
 }
 
 .other-options {
+  display: none;
   background: gold;
   background: white;
   padding-left: 0!important;
   padding-right: 0!important;
 }
 
-h3, .empty-column, .pause-div, .instructions-link {
+/*h3, .empty-column, .pause-div, .instructions-link {
   display: inline-block;
   width: 32.8%;
 
@@ -104,7 +133,7 @@ h3:nth-child(2), .pause-div {
 }
 h3:nth-child(3), .instructions-link {
   text-align: right;
-}
+}*/
 
 .other-options button, .instructions-area button {
   font-size: 20px;
@@ -119,11 +148,35 @@ h3:nth-child(3), .instructions-link {
 .game-board {
   background: grey;
   background: white;
+  position: relative;
   border: dotted 3px gold;
   margin: 10px 0;
   /*border-image-source: url('https://cl.ly/3c2J3c0l3r0P/dots.svg');
   border-image-slice: 33% 33%;
   border-image-repeat: round;*/
+}
+
+.center-dot {
+  position: absolute;
+  display: inline-block;
+  /*margin: 10px 0;*/
+  margin: 0 auto;
+  background: gold;
+  text-align: center;
+  /*padding: 10px 10px;*/
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center-dot span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /**** INSTRUCTIONS ****/

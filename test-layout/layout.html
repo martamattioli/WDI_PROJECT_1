@@ -9,6 +9,7 @@
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
     <script src="app.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700" rel="stylesheet">
     <link rel="stylesheet" href="./reset.css">
     <link rel="stylesheet" href="./layout.css">
@@ -16,21 +17,27 @@
   <body>
     <div class="container">
       <header>
+        <h3>High Score: <span>0</span></h3>
         <h1>
-          <span>C</span>
-          <span>o</span>
+          <span class="animated bounce">C</span>
+          <span class="o red"></span>
           <span>l</span>
-          <span>o</span>
+          <span class="o blue"></span>
           <span>r</span>
-
           <span>D</span>
-          <span>o</span>
+          <span class="o yellow"></span>
           <span>t</span>
           <span>s</span>
           <span>.</span>
         </h1>
+        <h3>
+          <span>&hearts;</span>
+          <span>&hearts;</span>
+          <span>&hearts;</span>
+        </h3>
       </header>
       <main>
+        <!-- <button type="button" name="button" id="clickme">click</button> -->
         <div class="start-area">
           <button>START GAME</button>
           <a href="#">Instructions</a>
@@ -38,7 +45,7 @@
         <div class="game-area">
           <div class="scoring-area">
             <h3>High Score: <span>0</span></h3>
-            <h3>Score: <span>0</span></h3>
+            <!-- <h3>Score: <span>0</span></h3> -->
             <h3>
               <span>&hearts;</span>
               <span>&hearts;</span>
@@ -46,7 +53,9 @@
             </h3>
           </div>
           <div class="game-board">
-            
+            <div class="center-dot">
+              <span class="score">0</span>
+            </div>
           </div>
           <div class="other-options">
             <div class="empty-column"></div>
