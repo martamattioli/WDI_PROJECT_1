@@ -17,7 +17,7 @@
   <body>
     <div class="container">
       <header>
-        <h3>High Score: <span>0</span></h3>
+        <h3 class="game-on">High Score: <span>0</span></h3>
         <h1>
           <span class="animated bounce">C</span>
           <span class="o red"></span>
@@ -30,40 +30,29 @@
           <span>s</span>
           <span>.</span>
         </h1>
-        <h3>
+        <h3 class="lives game-on">
           <span>&hearts;</span>
           <span>&hearts;</span>
           <span>&hearts;</span>
         </h3>
       </header>
       <main>
-        <!-- <button type="button" name="button" id="clickme">click</button> -->
         <div class="start-area">
           <button>START GAME</button>
           <a href="#">Instructions</a>
         </div>
-        <div class="game-area">
-          <div class="scoring-area">
-            <h3>High Score: <span>0</span></h3>
-            <!-- <h3>Score: <span>0</span></h3> -->
-            <h3>
-              <span>&hearts;</span>
-              <span>&hearts;</span>
-              <span>&hearts;</span>
-            </h3>
-          </div>
-          <div class="game-board">
-            <div class="center-dot">
-              <span class="score">0</span>
-            </div>
-          </div>
-          <div class="other-options">
-            <div class="empty-column"></div>
+        <div class="game-area game-on">
+          <div class="other-area">
             <div class="pause-div">
               <button id="pause">PAUSE</button>
             </div>
             <div class="instructions-link">
               <a href="#">Instructions</a>
+            </div>
+          </div>
+          <div class="game-board">
+            <div class="center-dot">
+              <span class="score">0</span>
             </div>
           </div>
         </div>

@@ -1,35 +1,49 @@
 var viewportHeight = $(window).height();
-var headerHeight = viewportHeight * 0.1;
+var headerHeight = viewportHeight * 0.12;
 var bodyHeight = viewportHeight * 0.9;
 var startAreaPadding = (bodyHeight - 91) / 2;
-var scoringAreaHeight = bodyHeight * 0.1;
-var otherOptHeight = bodyHeight * 0.15;
+var otherAreaHeight = viewportHeight * 0.15;
+var boardHeight = viewportHeight - headerHeight - otherAreaHeight - 20;
 
 function init() {
-  var getInstructionsDiv = $('.instructions');
-  var getInstructionsHeight = getInstructionsDiv.height();
-
 //After initial animation
   //Main container
   $('.container').height(viewportHeight);
   //Title Area
-  $('header').height(headerHeight).css('padding', `${(headerHeight - 30) / 2}`);
+  var headerPadding = (headerHeight - 30) / 2;
+
+  $('header').height(headerHeight).css('padding', `${headerPadding}`);
+
   //Main
   $('main').height(viewportHeight * 0.9);
+
   //Start Area
   $('.start-area').height(bodyHeight).css('padding', `${startAreaPadding}`);
+
   //Game Area
-  $('.game-area').height(bodyHeight);
+  $('.game-area').height(bodyHeight).css('padding', `${headerPadding}`);
+
   //Game board
-  $('.scoring-area').height(scoringAreaHeight).css('padding', `${(scoringAreaHeight - parseFloat($('h3:first-child').css('font-size'))) / 2}`);
-  $('.game-board').height(bodyHeight * 0.65);
-  $('.other-options').height(otherOptHeight).css('padding', `${(otherOptHeight - 51) / 2}`);
+  var pauseBtnHeight = $('#pause').outerHeight();
+  var otherAreaPadding = (otherAreaHeight - pauseBtnHeight) / 2;
+
+  console.log(pauseBtnHeight);
+  $('.other-area').height(otherAreaHeight).css('padding', `${otherAreaPadding}`);
+
+  $('.game-board').height(boardHeight);
+
   //Instructions
+  var getInstructionsDiv = $('.instructions');
+  var getInstructionsHeight = getInstructionsDiv.height();
+
   $('.instructions-area').height(bodyHeight).css('padding', `${(bodyHeight - 25 - getInstructionsHeight - 51) / 2}`);
 
+  //ANIMATE TITLE ON LOAD
   let counter = 0;
   const $spanArray = $('h1 span');
   const titleInterval = setInterval(function() {
+    $($spanArray[counter]).css('opacity', '1');
+
     $($spanArray[counter]).addClass('animated bounce');
 
     counter++;
@@ -39,6 +53,7 @@ function init() {
     }
   }, 200);
 
+  setTimeout(function())
 }
 
 $(init);

@@ -5,7 +5,6 @@
 .container {
   background: silver;
   background: white;
-  /*max-width: 600px;*/
   margin: 0 auto;
 }
 
@@ -27,21 +26,28 @@ a {
 header {
   background: red;
   background: white;
+  text-align: center;
 }
 
 h1 {
   font-size: 30px;
-  text-align: center;
+  margin-top: 27%;
+}
+
+h3 {
+  font-size: 18px;
 }
 
 h1 span {
   display: inline-block;
+  opacity: 0;
 }
 
 .o {
   width: 18px;
   height: 18px;
   border-radius: 50%;
+  border: solid 1px black;
 }
 
 .red {
@@ -56,7 +62,12 @@ h1 span {
 
 header h3, header h1 {
   display: inline-block;
-  width: 32.8%;
+  /*width: 32.8%;*/
+  width: 100%;
+}
+
+.lives {
+  text-align: right;
 }
 
 
@@ -96,51 +107,40 @@ main {
 }
 
 /**** GAME ****/
-
-.game-area {
-  /*display: none;*/
+.game-on {
+  display: none;
 }
 
-/* SCORING and OTHER OPTIONS DIVS */
-.scoring-area {
+.game-area {
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+}
+
+/* OTHER OPTIONS DIV */
+.other-area {
   max-width: 80%;
   margin: 0 auto;
   padding-left: 0!important;
   padding-right: 0!important;
-}
-
-.other-options {
-  display: none;
-  background: gold;
-  background: white;
-  padding-left: 0!important;
-  padding-right: 0!important;
-}
-
-/*h3, .empty-column, .pause-div, .instructions-link {
-  display: inline-block;
-  width: 32.8%;
-
-  font-size: 20px;
-}
-
-h3:nth-child(1) {
-  text-align: left;
-}
-
-h3:nth-child(2), .pause-div {
   text-align: center;
 }
-h3:nth-child(3), .instructions-link {
-  text-align: right;
-}*/
 
-.other-options button, .instructions-area button {
-  font-size: 20px;
-  padding: 10px 20px;
+.other-area button, .instructions-area button {
+  font-size: 15px;
+  padding: 5px 20px;
   border-radius: 4px;
-  border: solid 3px black;
+  border: solid 2px black;
   background: white;
+}
+
+.pause-div, .instructions-link {
+  display: inline-block;
+  padding: 0 20px;
+  width: 150px;
+}
+
+.instructions-link a {
+  font-size: 15px;
 }
 
 /* GAME BOARD */
@@ -150,22 +150,17 @@ h3:nth-child(3), .instructions-link {
   background: white;
   position: relative;
   border: dotted 3px gold;
-  margin: 10px 0;
-  /*border-image-source: url('https://cl.ly/3c2J3c0l3r0P/dots.svg');
-  border-image-slice: 33% 33%;
-  border-image-repeat: round;*/
+  margin: 0 auto;
 }
 
 .center-dot {
   position: absolute;
   display: inline-block;
-  /*margin: 10px 0;*/
   margin: 0 auto;
   background: gold;
   text-align: center;
-  /*padding: 10px 10px;*/
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   left: 50%;
   top: 50%;
@@ -221,7 +216,7 @@ h2 {
 /**** MEDIA QUERIES ****/
 
 @media only screen and (max-width: 500px) {
-  .other-options, .scoring-area {
+  .other-options, .other-area {
     padding-left: 10px!important;
     padding-right: 10px!important;
   }
