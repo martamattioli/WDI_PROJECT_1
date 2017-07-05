@@ -101,8 +101,6 @@ function stopIntervals() {
   clearTimeout(levelThree);
   clearInterval(dotColors);
   clearInterval(bubbleIntervals);
-  // dotColors = 0;
-  // bubbleIntervals = 0;
 }
 
 //To sort high score array

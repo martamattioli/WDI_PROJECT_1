@@ -9,11 +9,11 @@
 }
 
 /**** BASIC TYPOGRAPHY ****/
-h1, h2, h3, button, a, span, p {
+h1, h2, h3, button, a, span, p, .play-again {
   font-family: 'Quicksand', sans-serif;
 }
 
-h1, h2, h3, .start-area button, .center-dot span {
+h1, h2, h3, .start-area button, .center-dot span, .play-again {
   font-weight: bold;
 }
 
@@ -105,7 +105,7 @@ main {
   margin: 0 auto;
 }
 
-.start-area button {
+.start-area button, .play-again {
   font-size: 30px;
   padding: 15px 50px;
   border-radius: 4px;
@@ -186,6 +186,16 @@ main {
   transform: translate(-50%, -50%);
 }
 
+.bubble {
+  display: inline-block;
+  background: red;
+  padding: 10px 10px;
+  border-radius: 50%;
+  position: fixed;
+  z-index: 0;
+  overflow: hidden;
+}
+
 /**** INSTRUCTIONS ****/
 
 .instructions-area {
@@ -232,6 +242,31 @@ h2 {
   width: 88%;
   padding-left: 5%;
   font-size: 25px;
+}
+
+/**** GAME OVER ****/
+/*GAME OVER STYLING*/
+h2 {
+  font-size: 40px;
+  /*line-height: 600px;*/
+}
+
+.game-over {
+  display: none;
+  background: white;
+  text-align: center;
+  /*height: 650px;*/
+  /*padding-top: 220px;*/
+}
+
+.game-over h2, .game-over div {
+  /*padding: 20px 30px;*/
+}
+
+.play-again {
+  display: none;
+  margin-top: 30px;
+  /*display: inline-block;*/
 }
 
 /**** MEDIA QUERIES ****/
