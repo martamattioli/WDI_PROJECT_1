@@ -2,107 +2,183 @@
   box-sizing: border-box;
 }
 
-body {
-  position: relative;
-  max-width: 960px;
+.container {
+  background: white;
   margin: 0 auto;
-  font-family: sans-serif;
+  max-width: 960px;
+}
+
+/**** BASIC TYPOGRAPHY ****/
+h1, h2, h3, button, a, span, p, .play-again {
+  font-family: 'Quicksand', sans-serif;
+}
+
+h1, h2, h3, .start-area button, .center-dot span, .play-again {
+  font-weight: bold;
+}
+
+a {
+  font-size: 20px;
+  color: gold;
+}
+
+button {
+  cursor: pointer;
+}
+
+/**** HEADER AREA ****/
+
+header {
+  background: white;
+  text-align: center;
+  height: 71.27px;
 }
 
 h1 {
-  text-align: center;
-  margin-top: 60px;
   font-size: 30px;
+  margin-top: 27%;
+  width: 59.5%;
 }
 
-p {
-  /*display: none;*/
-  /*display: block;*/
-  padding: 25px 0;
-  font-size: 25px;
+h3 {
+  font-size: 18px;
+  width: 19.5%;
 }
 
-.high-score {
-  display: none;
-  float: left;
-  padding: 23px 25px 22px 25px;
+h1 span {
+  display: inline-block;
+  opacity: 0;
+}
+
+.o {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  /*border: solid 1px black;*/
+}
+
+.red {
+  background: red;
+}
+.blue {
+  background: blue;
+}
+.yellow {
+  background: yellow;
+}
+
+header h3, header h1 {
+  display: inline-block;
+}
+
+.high-score-div {
   text-align: left;
+}
+
+.lives {
+  text-align: right;
+  display: inline-block;
+}
+
+
+/**** BODY AREA ****/
+main {
+  background: coral;
+  background: white;
+}
+
+/**** START ****/
+
+.start-area {
+  display: none;
+  background: gold;
+  background: white;
+  padding-left: 0!important;
+  padding-right: 0!important;
+  -webkit-animation-duration: 1.3s;
+}
+
+.start-area button, .start-area a {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.start-area button, .play-again {
+  font-size: 30px;
+  padding: 15px 50px;
+  border-radius: 4px;
+
+  background: white;
+  border: solid 3px black;
+}
+
+.start-area a {
+  padding-top: 15px;
+}
+
+/**** GAME ****/
+.game-on {
+  display: none;
+}
+
+.game-area {
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+}
+
+/* OTHER OPTIONS DIV */
+.other-area {
+  max-width: 80%;
+  margin: 0 auto;
+  padding-left: 0!important;
+  padding-right: 0!important;
+  text-align: center;
+}
+
+.other-area button, .instructions-area button {
+  font-size: 15px;
+  padding: 5px 20px;
+  border-radius: 4px;
+  border: solid 2px black;
+  background: white;
+}
+
+.pause-div, .instructions-link {
+  display: inline-block;
+  padding: 0 20px;
+  width: 150px;
+}
+
+.instructions-link a {
   font-size: 15px;
 }
 
-/*p:nth-child(2) {
-  /*display: none;*/
-  /*width: 73%;*/
-  /*text-align: center;
-  float: left;
-  margin: 0 auto;
-}*/
-
-.score-div {
-  display: none;
-  position: absolute;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding: 25px;
-}
-
-.score-div p {
-  padding: 0;
-  text-align: center;
-}
-
-p:nth-child(3) {
-  display: none;
-  float: right;
-  padding: 26px 25px 26px 25px;
-}
+/* GAME BOARD */
 
 .game-board {
-  /*display: none;*/
-  background: #eeeeee;
-  width: 80%;
-  height: 500px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.borders {
-  background: #bdc3c7;
-  text-align: center;
-  width: 90%;
-  height: 650px;
-  z-index: 0;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, 10%);
-}
-
-.start-button {
-  display: inline-block;
-  /*display: none;*/
-  background: red;
-  text-align: center;
-  padding: 20px 30px;
-  border-radius: 4px;
-  cursor: pointer;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  background: grey;
+  background: white;
+  position: relative;
+  border: dotted 3px gold;
+  margin: 0 auto;
 }
 
 .center-dot {
-  /*display: inline-block;*/
-  display: none;
+  position: absolute;
+  display: inline-block;
   margin: 0 auto;
-  background: red;
+  background: gold;
   text-align: center;
-  padding: 10px 10px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center-dot span {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -119,18 +195,55 @@ p:nth-child(3) {
   overflow: hidden;
 }
 
-/*PAUSE STYLING*/
-.pause {
+/**** INSTRUCTIONS ****/
+
+.instructions-area {
   display: none;
-  position: absolute;
-  bottom: 10px;
-  left: 45%;
-  padding: 20px;
-  background: green;
-  border-radius: 4px;
-  cursor: pointer;
+
+  background: pink;
+  background: white;
+  text-align: center;
+  padding-left: 0!important;
+  padding-right: 0!important;
 }
 
+h2 {
+  font-size: 25px;
+}
+
+.row {
+  text-align: left;
+  padding: 20px 5%;
+}
+
+.instructions p {
+  display: inline-block;
+}
+
+.number {
+  width: 10%;
+  font-size: 60px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.color-red {
+  color: red;
+}
+.color-blue {
+  color: blue;
+}
+.color-yellow {
+  color: yellow;
+}
+
+.text {
+  width: 88%;
+  padding-left: 5%;
+  font-size: 25px;
+}
+
+/**** GAME OVER ****/
 /*GAME OVER STYLING*/
 h2 {
   font-size: 40px;
@@ -139,20 +252,74 @@ h2 {
 
 .game-over {
   display: none;
-  background: pink;
-  height: 650px;
-  padding-top: 220px;
+  background: white;
+  text-align: center;
+  /*height: 650px;*/
+  /*padding-top: 220px;*/
 }
 
 .game-over h2, .game-over div {
-  padding: 20px 30px;
+  /*padding: 20px 30px;*/
 }
 
 .play-again {
   display: none;
   margin-top: 30px;
-  background-color: red;
   /*display: inline-block;*/
-  border-radius: 4px;
-  cursor: pointer;
+}
+
+/**** MEDIA QUERIES ****/
+
+@media only screen and (max-width: 630px) {
+  .other-options, .other-area {
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+  }
+
+  /*header {
+    height: 100px;
+  }*/
+
+  h1 {
+    font-size: 25px;
+    width: 40.5%;
+  }
+
+  header h3 {
+    width: 28.5%;
+    font-size: 15px;
+  }
+
+  .other-options a {
+    font-size: 15px;
+  }
+
+  /*INSTRUCTIONS AREA*/
+  .number {
+    font-size: 30px;
+  }
+
+  .text {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  h1 {
+    font-size: 20px;
+    width: 58.5%;
+  }
+
+  header h3 {
+    width: 19.5%;
+    font-size: 15px;
+  }
+
+  .lives span {
+    font-size: 20px;
+  }
+
+  .pause-div, .instructions-link {
+    width: 110px;
+  }
 }
