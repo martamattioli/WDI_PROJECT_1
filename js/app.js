@@ -17,8 +17,8 @@ var lives = 3;
 var pointsInARow = 0;
 
 //Variable for color array
-var colorsNextLevels = ['pink', 'blue', 'white'];
-var colors = ['red', 'yellow', 'green'];
+var colorsNextLevels = ['#5ba349', '#ab2346', '#274690'];
+var colors = ['#7ddf64', '#de5360', '#3e92cc'];
 
 //Variables for the central dot
 var progressColorCounter = 0;
@@ -93,16 +93,6 @@ function levelTwo(num) { //Level 2
   colors.push(colorsNextLevels[num]);
   console.log(colors);
 }
-
-// function levelThree() {
-//   colors.push(colorsNextLevels[1]);
-//   console.log(colors);
-// }
-//
-// function levelFour() {
-//   colors.push(colorsNextLevels[2]);
-//   console.log(colors);
-// }
 
 //
 //END VARIABLES
@@ -312,7 +302,7 @@ function init() {
     setTimeout(bringLivesBack, 3000);
 
     //Reset the colors array back to the original colors:
-    colors = ['red', 'yellow', 'green'];
+    colors = ['#7ddf64', '#de5360', '#3e92cc'];
 
     //Make board disappear and make game over message appear
     $($gameArea).fadeOut('slow');
@@ -327,7 +317,7 @@ function init() {
 
     function reset() {
       //Reset the colors array back to the original colors:
-      colors = ['red', 'yellow', 'green'];
+      colors = ['#7ddf64', '#de5360', '#3e92cc'];
 
       //Reset lives and score
       lives = 3;
@@ -476,6 +466,11 @@ function init() {
   $($startBtn).on('click', showGame);
   $($inGameInstrLink).on('click', appearInstructions);
   $('#pause').on('click', pauseGame);
+  console.log($('button'));
+  $('.start-area button').on('mouseover', () => {
+    console.log('event fired');
+    $(this).css('background-color', `${colors[Math.floor(Math.random() * (colors.length))]}!important`);
+  });
 }
 
 $(init);

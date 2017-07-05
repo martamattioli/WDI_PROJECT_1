@@ -3,7 +3,7 @@
 }
 
 .container {
-  background: white;
+  background: #fffef8;
   margin: 0 auto;
   max-width: 960px;
 }
@@ -11,6 +11,7 @@
 /**** BASIC TYPOGRAPHY ****/
 h1, h2, h3, button, a, span, p, .play-again {
   font-family: 'Quicksand', sans-serif;
+  color: #23252B;
 }
 
 h1, h2, h3, .start-area button, .center-dot span, .play-again {
@@ -19,17 +20,24 @@ h1, h2, h3, .start-area button, .center-dot span, .play-again {
 
 a {
   font-size: 20px;
-  color: gold;
+  color: #f45b69;
+}
+
+a:hover {
+  color: #d3114d;
 }
 
 button {
   cursor: pointer;
 }
 
+button:hover {
+  background: #7ddf64!important;
+}
+
 /**** HEADER AREA ****/
 
 header {
-  background: white;
   text-align: center;
   height: 71.27px;
 }
@@ -58,13 +66,14 @@ h1 span {
 }
 
 .red {
-  background: red;
+  background: #f45b69;
 }
 .blue {
-  background: blue;
+  /*background: #3e92cc;*/
+  background: #7ddf64;
 }
 .yellow {
-  background: yellow;
+  background: #FFC914;
 }
 
 header h3, header h1 {
@@ -78,21 +87,16 @@ header h3, header h1 {
 .lives {
   text-align: right;
   display: inline-block;
+  color: #f45b69;
 }
 
 
 /**** BODY AREA ****/
-main {
-  background: coral;
-  background: white;
-}
 
 /**** START ****/
 
 .start-area {
   display: none;
-  background: gold;
-  background: white;
   padding-left: 0!important;
   padding-right: 0!important;
   -webkit-animation-duration: 1.3s;
@@ -157,10 +161,10 @@ main {
 /* GAME BOARD */
 
 .game-board {
-  background: grey;
   background: white;
   position: relative;
-  border: dotted 3px gold;
+  border: solid 3px black;
+  border-radius: 4px;
   margin: 0 auto;
 }
 
@@ -168,7 +172,7 @@ main {
   position: absolute;
   display: inline-block;
   margin: 0 auto;
-  background: gold;
+  /*background: gold;*/
   text-align: center;
   width: 30px;
   height: 30px;
@@ -187,21 +191,19 @@ main {
 
 .bubble {
   display: inline-block;
-  background: red;
+  /*background: #f45b69;*/
   padding: 10px 10px;
   border-radius: 50%;
   position: fixed;
   z-index: 0;
   overflow: hidden;
+  cursor: pointer;
 }
 
 /**** INSTRUCTIONS ****/
 
 .instructions-area {
   display: none;
-
-  background: pink;
-  background: white;
   text-align: center;
   padding-left: 0!important;
   padding-right: 0!important;
@@ -228,31 +230,30 @@ h2 {
 }
 
 .color-red {
-  color: red;
+  color: #f45b69;
 }
 .color-blue {
-  color: blue;
+  color: #7ddf64;
 }
 .color-yellow {
-  color: yellow;
+  color: #FFC914;
 }
 
 .text {
-  width: 88%;
+  width: 89%;
   padding-left: 5%;
   font-size: 25px;
 }
 
 /**** GAME OVER ****/
 /*GAME OVER STYLING*/
-h2 {
+.game-over h2 {
   font-size: 40px;
   /*line-height: 600px;*/
 }
 
 .game-over {
   display: none;
-  background: white;
   text-align: center;
   /*height: 650px;*/
   /*padding-top: 220px;*/
@@ -266,6 +267,7 @@ h2 {
   display: none;
   margin-top: 30px;
   /*display: inline-block;*/
+  cursor: pointer;
 }
 
 /**** MEDIA QUERIES ****/
