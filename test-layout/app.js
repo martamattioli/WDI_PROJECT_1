@@ -46,11 +46,11 @@ var gamePaused = false;
 function xPositionExclude50() {
   xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (xCoordinate >= 40 && xCoordinate <= 55) {
-    console.log(`xoops.. ${xCoordinate}`);
+    // console.log(`xoops.. ${xCoordinate}`);
     xPositionExclude50();
   } else {
     // console.log(`xbetter.. ${xCoordinate}`);
-    console.log('X:', typeof xCoordinate, xCoordinate);
+    // console.log('X:', typeof xCoordinate, xCoordinate);
     return xCoordinate;
   }
 }
@@ -58,12 +58,24 @@ function xPositionExclude50() {
 function yPositionExclude50() {
   yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (yCoordinate >= 40 && yCoordinate <= 55) {
-    console.log(`yoops.. ${yCoordinate}`);
+    // console.log(`yoops.. ${yCoordinate}`);
     yPositionExclude50();
   } else {
     // console.log(`ybetter.. ${yCoordinate}`);
-    console.log('Y:',typeof yCoordinate, yCoordinate);
+    // console.log('Y:',typeof yCoordinate, yCoordinate);
     return yCoordinate;
+  }
+}
+
+//GAME GLOBAL FUNCTIONS
+function changeFreqOnScore() {
+  console.log('changeFreqOnScore fired');
+  if (score < 5) { //freq at level 1
+    randomFreq = Math.floor((Math.random() * (1200 - 1000 + 1)) + 800);
+  } else if (score >= 5 && score < 10) { //freq at level 2
+    randomFreq = Math.floor((Math.random() * (1000 - 600 + 1)) + 600);
+  } else { //freq at level 3
+    randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
   }
 }
 
@@ -73,25 +85,18 @@ function yPositionExclude50() {
 
 function init() {
   //Grab elements
-  const html = $('html');
-
+  const html = $('html'); //MAIN CONTAINERS VARS
   const $container = $('.container');
-
-  const $header = $('header');
+  const $header = $('header'); //HEADER VARS
   const $h1Letters = $('h1 span');
   const $h1 = $('h1');
   const $headerH3 = $('header h3');
-
-  // const $main = $('main');
-
-  const $startArea = $('.start-area');
+  const $startArea = $('.start-area'); //START AREA VARS
   const $startBtn = $('.start-area button');
-
-  const $instructionsArea = $('.instructions-area');
+  const $instructionsArea = $('.instructions-area'); //INSTRUCTIONS VARS
   const $instructionsLink = $('.start-area a');
   const $closeBtn = $('.instructions-area button');
-
-  const $gameArea = $('.game-area');
+  const $gameArea = $('.game-area'); //GAME VARS
   const $gameOn = $('.game-on');
   const $score = $('#score');
   const $centerDot = $('.center-dot');
@@ -105,11 +110,11 @@ function init() {
   const $playAgain = $('.play-again');
   const $highScoreH3 = $('.high-score');
 
-  var bodyHeight = viewportHeight - $header.outerHeight();
-  var boardHeight = bodyHeight - otherAreaHeight - 20;
+  let bodyHeight = viewportHeight - $header.outerHeight();
+  let boardHeight = bodyHeight - otherAreaHeight - 20;
 
   function elementSizes() {
-    console.log('I fired');
+    // console.log('I fired');
     var scrollPosition = [
       self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
       self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
@@ -137,8 +142,8 @@ function init() {
     $($gameBoard).height(boardHeight);
 
     //Game over height
-    const $gameOverHeight = $($gameOver).height();
-    console.log($gameOverHeight);
+    // const $gameOverHeight = $($gameOver).height();
+    // console.log($gameOverHeight);
 
     $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - 110) / 2}`);
   }
@@ -265,6 +270,11 @@ function init() {
     });
   }
 
+  //Brings lives background
+  function bringLivesBack() {
+    $($lives).css('opacity', '1').toggleClass('animated pulse');
+  }
+
   //GAME OVER
   function gameOver() {
     console.log('Game OVER');
@@ -272,9 +282,9 @@ function init() {
     console.log(colors);
 
     highScore.push(score);
-    console.log(`High score array: ${highScore}`);
+    // console.log(`High score array: ${highScore}`);
     sortHighscore();
-    console.log(`High score array after sort: ${highScore}`);
+    // console.log(`High score array after sort: ${highScore}`);
     //display high score - do not reset it
     $($highScoreH3).html(highScore[highScore.length - 1]);
 
@@ -286,9 +296,7 @@ function init() {
 
     //reset lives to 3 and make hearts appear again
     lives = 3;
-    setTimeout(function() {
-      $($lives).css('opacity', '1').toggleClass('animated pulse');
-    }, 3000);
+    setTimeout(bringLivesBack, 3000);
 
     //Reset the colors array back to the original colors:
     colors = ['red', 'yellow', 'green'];
@@ -311,6 +319,7 @@ function init() {
       //Reset lives and score
       lives = 3;
       score = 0;
+      bringLivesBack();
 
       //Reset reandomFreq back to how it was before the levels advance
       randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
@@ -339,7 +348,7 @@ function init() {
     if (gamePaused === true) {
       clearTimeout(timeOutBubble);
     }
-    $(`#${timerIds}`).fadeOut(2000);
+    $(`#${timerIds}`).addClass('animated zoomOut');
     setTimeout( function() {
       //If click event doesn't happen --> remove a life
       if (lives > 0) {
@@ -351,16 +360,21 @@ function init() {
     timerIds++;
   }
 
-  function addBubbles() {
+  function createABubble() {
     var bubbleColor = colors[Math.floor(Math.random() * (colors.length))];
+
     $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).addClass('animated zoomIn').appendTo($gameBoard).css({
       'left': `${xCoordinate}%`,
       'top': `${yCoordinate}%`,
       'background-color': bubbleColor,
       'padding': Math.floor((Math.random() * (30 - 10 + 1)) + 10)
     }).one('click', checkColor);
-    //!!!!!!! SOMETIMES XCOORDINATE AND Y COORDINATE ARE UNDEFINED... WHY??
-    console.log(xCoordinate, yCoordinate);
+  }
+
+  function addBubbles() {
+    createABubble(); //add bubbles
+
+    // console.log(xCoordinate, yCoordinate); //!!!!!!! SOMETIMES XCOORDINATE AND Y COORDINATE ARE UNDEFINED... WHY??
 
     xCoordinate = xPositionExclude50();
     yCoordinate = yPositionExclude50();
@@ -370,16 +384,7 @@ function init() {
     bubbleIds++;
 
     //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
-    if (score < 5) {
-      //freq at level 1
-      randomFreq = Math.floor((Math.random() * (1200 - 1000 + 1)) + 800);
-    } else if (score >= 5 && score < 10) {
-      //freq at level 2
-      randomFreq = Math.floor((Math.random() * (1000 - 600 + 1)) + 600);
-    } else {
-      //freq at level 3
-      randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
-    }
+    changeFreqOnScore();
   }
 
   function checkColor(e) {
