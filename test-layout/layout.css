@@ -32,15 +32,19 @@ header {
   background: red;
   background: white;
   text-align: center;
+  /*position: absolute;*/
+  height: 71.27px;
 }
 
 h1 {
   font-size: 30px;
   margin-top: 27%;
+  width: 59.5%;
 }
 
 h3 {
   font-size: 18px;
+  width: 19.5%;
 }
 
 h1 span {
@@ -67,7 +71,6 @@ h1 span {
 
 header h3, header h1 {
   display: inline-block;
-  width: 100%;
 }
 
 .high-score {
@@ -226,21 +229,30 @@ h2 {
 }
 
 .text {
-  width: 89%;
+  width: 88%;
   padding-left: 5%;
   font-size: 25px;
 }
 
 /**** MEDIA QUERIES ****/
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 630px) {
   .other-options, .other-area {
     padding-left: 10px!important;
     padding-right: 10px!important;
   }
 
-  h3, .empty-column, .pause-div, .instructions-link {
-    width: 32.4%;
+  /*header {
+    height: 100px;
+  }*/
+
+  h1 {
+    font-size: 25px;
+    width: 40.5%;
+  }
+
+  header h3 {
+    width: 28.5%;
     font-size: 15px;
   }
 
@@ -255,5 +267,25 @@ h2 {
 
   .text {
     font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  h1 {
+    font-size: 20px;
+    width: 58.5%;
+  }
+
+  header h3 {
+    width: 19.5%;
+    font-size: 15px;
+  }
+
+  .lives span {
+    font-size: 20px;
+  }
+
+  .pause-div, .instructions-link {
+    width: 110px;
   }
 }
