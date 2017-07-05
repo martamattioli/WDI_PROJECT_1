@@ -93,11 +93,14 @@ function init() {
   const $score = $('#score');
   const $centerDot = $('.center-dot');
   const $bubble = $('.bubble');
+  const $lives = $('.lives');
   const $pauseBtn = $('#pause');
   const $otherArea = $('.other-area');
   const $inGameInstrLink = $('.instructions-link a');
   const $gameBoard = $('.game-board');
   const $gameOver = $('.game-over');
+  const $playAgain = $('.play-again');
+  const $highScoreH3 = $('.high-score');
 
   var bodyHeight = viewportHeight - $header.outerHeight();
   var boardHeight = bodyHeight - otherAreaHeight - 20;
@@ -130,10 +133,11 @@ function init() {
     //Game board
     $($gameBoard).height(boardHeight);
 
-    //Instructions
+    //Game over height
     const $gameOverHeight = $($gameOver).height();
+    console.log($gameOverHeight);
 
-    $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - $gameOverHeight) / 2}`);
+    $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - 110) / 2}`);
   }
 
   elementSizes();
@@ -228,7 +232,7 @@ function init() {
   //If click event hasn't fired
   function checkClickEvent() {
     if ($(`#${timerIds}`).attr('value') === $($centerDot).attr('value')) {
-      $(`#life-${lives}`).fadeOut();
+      $(`#life-${lives}`).css('opacity', '0.3');
       lives--;
       console.log(`lives if click hasn't happened: ${lives}`);
       if (lives === 0) {
@@ -267,36 +271,35 @@ function init() {
     sortHighscore();
     console.log(`High score array after sort: ${highScore}`);
     //display high score - do not reset it
-    $('#highest-score').html(highScore[highScore.length - 1]);
+    $($highScoreH3).html(highScore[highScore.length - 1]);
 
     //reset score to 0
     setTimeout(function() {
       score = 0;
       $($score).html(score);
-    }, 1000);
+    }, 500);
 
     //reset lives to 3 and make hearts appear again
     lives = 3;
     setTimeout(function() {
-      $(`.lives`).fadeIn();
-    }, 1000);
+      $($lives).css('opacity', '1').toggleClass('animated pulse');
+    }, 3000);
 
     //Reset the colors array back to the original colors:
     colors = ['red', 'yellow', 'green'];
 
     //Make board disappear and make game over message appear
-    $($container).fadeOut('slow');
-    $('.game-over').fadeIn('slow');
+    $($gameArea).fadeOut('slow');
+    $($gameOver).fadeIn('slow');
 
     //Stop intervals
     stopIntervals();
 
     setTimeout(function() {
-      $('.play-again').fadeIn('slow').css('display', 'inline-block');
+      $($playAgain).addClass('animated bounceInUp').css('display', 'inline-block');
     }, 2000);
 
-    //If user clicks on PLAY AGAIN BUTTON
-    $('.play-again').on('click', () => {
+    function reset() {
       //Reset the colors array back to the original colors:
       colors = ['red', 'yellow', 'green'];
 
@@ -308,12 +311,15 @@ function init() {
       randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
 
       //Make game over message disappear and game board appear
-      $('.game-over').fadeOut('slow');
-      $($container).fadeIn('slow');
+      $($gameOver).fadeOut('slow');
+      $($gameArea).fadeIn('slow');
       //Reactivate intervals for bubbles and center-dot
       startDotInterval();
       setTimeout(appearBubbles, 2000);
-    });
+    }
+
+    //If user clicks on PLAY AGAIN BUTTON
+    $($playAgain).on('click', reset);
   }
 
   //Intervals for various bubbles
@@ -342,7 +348,7 @@ function init() {
 
   function addBubbles() {
     var bubbleColor = colors[Math.floor(Math.random() * (colors.length))];
-    $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).fadeIn(1000).appendTo('.game-board').css({
+    $('<div/>').addClass('bubble').attr('id', `${bubbleIds}`).attr('value', `${bubbleColor}`).addClass('animated zoomIn').appendTo($gameBoard).css({
       'left': `${xCoordinate}%`,
       'top': `${yCoordinate}%`,
       'background-color': bubbleColor,
@@ -390,7 +396,7 @@ function init() {
       }
     } else {
       console.log(`clickedVal: ${$(e.target).attr('value')}`, `dotVal: ${$($centerDot).attr('value')}`, 'OH NO');
-      $(`#life-${lives}`).fadeOut();
+      $(`#life-${lives}`).css('opacity', '0.3');
       lives--;
       console.log(`Score: ${score}`);
       // console.log(`Lives: ${lives}`);
@@ -400,7 +406,7 @@ function init() {
       pointsInARow = 0;
 
       if (lives === 0) {
-        $('.bubble').off('click');
+        $($bubble).off('click');
         clearInterval(dotColors);
         clearInterval(bubbleIntervals);
         lives = 3;
@@ -430,7 +436,7 @@ function init() {
 
     $($otherArea).height(otherAreaHeight).css('padding', `${otherAreaPadding}`);
 
-    $('.center-dot').css('background', colors[progressColorCounter]).attr('value', colors[progressColorCounter]);
+    $($centerDot).css('background', colors[progressColorCounter]).attr('value', colors[progressColorCounter]);
     startDotInterval();
     setTimeout(appearBubbles, 2000);
   }
