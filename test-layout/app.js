@@ -66,7 +66,10 @@ function yPositionExclude50() {
     return yCoordinate;
   }
 }
-//END FOR THE GAME
+
+//
+//END VARIABLES
+//
 
 function init() {
   //Grab elements
@@ -154,24 +157,26 @@ function init() {
     }
   }
 
+  function startButtonAppear() {
+    $($startArea).height(bodyHeight).css('display', 'block').addClass('animated bounceInUp');
+    const startAreaPadding = (bodyHeight - $startBtn.outerHeight() - $instructionsLink.outerHeight()) / 2;
+    $($startArea).css('padding', `${startAreaPadding}`);
+  }
+
   function pushUpTitle() { //Title and start btn go up
-    $($h1).animate({marginTop: '0%'}, 1000);
-    setTimeout(function() {
-      $($startArea).height(bodyHeight).css('display', 'block').addClass('animated bounceInUp');
-      const startAreaPadding = (bodyHeight - $startBtn.outerHeight() - $instructionsLink.outerHeight()) / 2;
-      $($startArea).css('padding', `${startAreaPadding}`);
-    }, 1000);
+    $($h1).animate({marginTop: '0%'}, 1000); //Btn goes up
+    setTimeout(startButtonAppear, 1000); //startBtn goes up
   }
 
   let closeLogic = 0;
 
   function disappearInstructions() { //Close Instructions
     $($instructionsArea).fadeOut(2000);
-    if (closeLogic === 1) {
-      $($startArea).fadeIn();
+    if (closeLogic === 1) { //if you were in the homepage
+      $($startArea).fadeIn(); //get startArea to appear
       closeLogic = 0;
-    } else if (closeLogic === 2) {
-      $($gameOn).fadeIn();
+    } else if (closeLogic === 2) { //if you were in the game
+      $($gameOn).fadeIn(); //get Game to appear
       closeLogic = 0;
     }
   }
