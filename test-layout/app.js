@@ -79,6 +79,31 @@ function changeFreqOnScore() {
   }
 }
 
+function changeLevelOnScore() { //Progress Levels
+  if (score === 5) {
+    levelTwo(0);
+  } else if (score === 10) {
+    levelTwo(1);
+  } else if (score === 13) {
+    levelTwo(2);
+  }
+}
+
+function levelTwo(num) { //Level 2
+  colors.push(colorsNextLevels[num]);
+  console.log(colors);
+}
+
+// function levelThree() {
+//   colors.push(colorsNextLevels[1]);
+//   console.log(colors);
+// }
+//
+// function levelFour() {
+//   colors.push(colorsNextLevels[2]);
+//   console.log(colors);
+// }
+
 //
 //END VARIABLES
 //
@@ -142,9 +167,6 @@ function init() {
     $($gameBoard).height(boardHeight);
 
     //Game over height
-    // const $gameOverHeight = $($gameOver).height();
-    // console.log($gameOverHeight);
-
     $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - 110) / 2}`);
   }
 
@@ -181,6 +203,7 @@ function init() {
       $($startArea).fadeIn(); //get startArea to appear
       closeLogic = 0;
     } else if (closeLogic === 2) { //if you were in the game
+      pauseGame();
       $($gameOn).fadeIn(); //get Game to appear
       closeLogic = 0;
     }
@@ -192,6 +215,9 @@ function init() {
       closeLogic = 1;
       $($startArea).fadeOut(1000);
     } else if (this === $inGameInstrLink[0]) {
+      if (gamePaused === false) {
+        pauseGame();
+      }
       closeLogic = 2;
       $($gameOn).fadeOut(1000);
     }
@@ -223,20 +249,13 @@ function init() {
     randomIntervals = Math.floor((Math.random() * (7000 - 2000 + 1)) + 2000);
   }
 
-  //Add levels to the game:
-  function levelOne() {
-    colors.push(colorsNextLevels[0]);
-    console.log(colors);
-  }
-
-  function levelTwo() {
-    colors.push(colorsNextLevels[1]);
-    console.log(colors);
-  }
-
-  function levelThree() {
-    colors.push(colorsNextLevels[2]);
-    console.log(colors);
+  function checkIfAlive() {
+    console.log('checkIfAlive fired');
+    if (lives === 0) {
+      $($bubble).off('click');
+      stopIntervals();
+      gameOver();
+    }
   }
 
   //If click event hasn't fired
@@ -245,20 +264,14 @@ function init() {
       $(`#life-${lives}`).css('opacity', '0.3');
       lives--;
       console.log(`lives if click hasn't happened: ${lives}`);
-      if (lives === 0) {
-        $($bubble).off('click');
-        stopIntervals();
-        gameOver();
-      }
+      checkIfAlive();
     }
   }
 
   //Stop intervals when game is OVER
   function stopIntervals() {
-    console.log('stopIntervals() has fired');
-    clearTimeout(levelOne);
+    // console.log('stopIntervals() has fired');
     clearTimeout(levelTwo);
-    clearTimeout(levelThree);
     clearInterval(dotColors);
     clearInterval(bubbleIntervals);
   }
@@ -303,7 +316,7 @@ function init() {
 
     //Make board disappear and make game over message appear
     $($gameArea).fadeOut('slow');
-    $($gameOver).fadeIn('slow');
+    $($gameOver).toggleClass('animated bounceInUp').css('display', 'block');
 
     //Stop intervals
     stopIntervals();
@@ -325,7 +338,7 @@ function init() {
       randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
 
       //Make game over message disappear and game board appear
-      $($gameOver).fadeOut('slow');
+      $($gameOver).fadeOut('slow').css('display', 'none');
       $($gameArea).fadeIn('slow');
       //Reactivate intervals for bubbles and center-dot
       startDotInterval();
@@ -415,21 +428,26 @@ function init() {
       //If user makes a mistake, reset points in a row:
       pointsInARow = 0;
 
-      if (lives === 0) {
-        $($bubble).off('click');
-        clearInterval(dotColors);
-        clearInterval(bubbleIntervals);
-        lives = 3;
-        gameOver();
-      }
+      checkIfAlive();
     }
 
-    if (score === 5) {
-      levelOne();
-    } else if (score === 10) {
-      levelTwo();
-    } else if (score === 13) {
-      levelThree();
+    changeLevelOnScore();
+  }
+
+  function pauseGame() {
+    if (gamePaused === false) {
+      //stop the interval
+      clearInterval(dotColors);
+      clearInterval(bubbleIntervals);
+      gamePaused = true;
+      console.log(gamePaused, 'the game should pause');
+    } else {
+      console.log(gamePaused, 'before reactivate interval');
+      // reactivate interval
+      startDotInterval();
+      appearBubbles();
+      gamePaused = false;
+      console.log(gamePaused, 'the game should reactivate');
     }
   }
 
@@ -457,6 +475,7 @@ function init() {
   $($instructionsLink).on('click', appearInstructions);
   $($startBtn).on('click', showGame);
   $($inGameInstrLink).on('click', appearInstructions);
+  $('#pause').on('click', pauseGame);
 }
 
 $(init);
