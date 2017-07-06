@@ -36,8 +36,8 @@ colorDots.randomIntervals = Math.floor((Math.random() * (10000 - 2000 + 1)) + 20
 
 //Bubbles positioning
 colorDots.paddingNow;
-colorDots.xCoordinate = xPositionExclude50();
-colorDots.yCoordinate = yPositionExclude50();
+colorDots.xCoordinate;
+colorDots.yCoordinate;
 
 //Bubble intervals variables
 colorDots.bubbleIntervals;
@@ -53,14 +53,15 @@ colorDots.disappearBubblesTime = 4000;
 colorDots.gamePaused = false;
 
 //Postion values of bubbles
-function xPositionExclude50() {
+colorDots.xPositionExclude50 = function() {
   colorDots.xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (colorDots.xCoordinate >= 40 && colorDots.xCoordinate <= 55) {
-    xPositionExclude50();
+    console.log('I fired');
+    colorDots.xPositionExclude50();
   } else {
     return colorDots.xCoordinate;
   }
-}
+};
 
 function yPositionExclude50() {
   colorDots.yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
@@ -101,7 +102,7 @@ function levelTwo(num) { //Level 2
 //END VARIABLES
 //
 
-function init() {
+colorDots.init = function() {
   //Grab elements
   colorDots.html = $('html'); //MAIN CONTAINERS VARS
   colorDots.$container = $('.container');
@@ -395,7 +396,7 @@ function init() {
   function addBubbles() {
     createABubble(); //add bubbles
 
-    colorDots.xCoordinate = xPositionExclude50();
+    colorDots.xCoordinate = colorDots.xPositionExclude50();
     colorDots.yCoordinate = yPositionExclude50();
 
     //Fade out and remove divs
@@ -509,6 +510,6 @@ function init() {
   colorDots.$button.on('mouseover', changeButtonColor);
   colorDots.$aLink.on('mouseover', changeLinkColor);
   colorDots.$soundIcon.on('click', soundOnOff);
-}
+};
 
-$(init);
+$(colorDots.init.bind(colorDots));
