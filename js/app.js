@@ -47,7 +47,7 @@ colorDots.timerIds = 0;
 colorDots.removeDiv = 0;
 
 //PAUSE GAME
-var gamePaused = false;
+colorDots.gamePaused = false;
 
 //Postion values of bubbles
 function xPositionExclude50() {
@@ -100,21 +100,21 @@ function levelTwo(num) { //Level 2
 
 function init() {
   //Grab elements
-  const html = $('html'); //MAIN CONTAINERS VARS
-  const $container = $('.container');
-  const $button = $('button');
-  const $aLink = $('a');
-  const $header = $('header'); //HEADER VARS
-  const $h1Letters = $('h1 span');
-  const $h1 = $('h1');
-  const $headerH3 = $('header h3');
-  const $startArea = $('.start-area'); //START AREA VARS
-  const $startBtn = $('.start-area button');
-  const $instructionsArea = $('.instructions-area'); //INSTRUCTIONS VARS
-  const $instructionsLink = $('.start-area a');
-  const $closeBtn = $('.instructions-area button');
-  const $gameArea = $('.game-area'); //GAME VARS
-  const $gameOn = $('.game-on');
+  colorDots.html = $('html'); //MAIN CONTAINERS VARS
+  colorDots.$container = $('.container');
+  colorDots.$button = $('button');
+  colorDots.$aLink = $('a');
+  colorDots.$header = $('header'); //HEADER VARS
+  colorDots.$h1Letters = $('h1 span');
+  colorDots.$h1 = $('h1');
+  colorDots.$headerH3 = $('header h3');
+  colorDots.$startArea = $('.start-area'); //START AREA VARS
+  colorDots.$startBtn = $('.start-area button');
+  colorDots.$instructionsArea = $('.instructions-area'); //INSTRUCTIONS VARS
+  colorDots.$instructionsLink = $('.start-area a');
+  colorDots.$closeBtn = $('.instructions-area button');
+  colorDots.$gameArea = $('.game-area'); //GAME VARS
+  colorDots.$gameOn = $('.game-on');
   const $score = $('#score');
   const $centerDot = $('.center-dot');
   const $bubble = $('.bubble');
@@ -128,7 +128,7 @@ function init() {
   const $playAgain = $('.play-again');
   const $highScoreH3 = $('.high-score');
 
-  let bodyHeight = colorDots.viewportHeight - $header.outerHeight();
+  let bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
   let boardHeight = bodyHeight - colorDots.otherAreaHeight - 20;
 
   function elementSizes() {
@@ -137,24 +137,24 @@ function init() {
       self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
     ];
 
-    html.data('scroll-position', scrollPosition);
-    html.data('previous-overflow', html.css('overflow'));
-    html.css('overflow', 'hidden');
+    colorDots.html.data('scroll-position', scrollPosition);
+    colorDots.html.data('previous-overflow', colorDots.html.css('overflow'));
+    colorDots.html.css('overflow', 'hidden');
     window.scrollTo(scrollPosition[0], scrollPosition[1]);
 
-    bodyHeight = colorDots.viewportHeight - $header.outerHeight();
+    bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
     colorDots.otherAreaHeight = colorDots.viewportHeight * 0.15;
     boardHeight = colorDots.viewportHeight - colorDots.headerHeight - colorDots.otherAreaHeight - 20;
 
     //Main container
-    $($container).height(colorDots.viewportHeight);
+    $(colorDots.$container).height(colorDots.viewportHeight);
 
     //Title Area
     var headerPadding = (colorDots.headerHeight - 30) / 2;
-    $($header).css('padding', `${headerPadding}`);
+    $(colorDots.$header).css('padding', `${headerPadding}`);
 
     //Game Area
-    $($gameArea).height(bodyHeight).css('padding', `${headerPadding}`);
+    $(colorDots.$gameArea).height(bodyHeight).css('padding', `${headerPadding}`);
     //Game board
     $($gameBoard).height(boardHeight);
 
@@ -167,63 +167,63 @@ function init() {
   $( window ).resize(elementSizes);
 
   function bounceLetters() { //Each letter of the title bouces in
-    $($h1Letters[colorDots.h1LettersCounter]).css('opacity', '1').addClass('animated bounce');
+    $(colorDots.$h1Letters[colorDots.h1LettersCounter]).css('opacity', '1').addClass('animated bounce');
 
     colorDots.h1LettersCounter++;
 
-    if (colorDots.h1LettersCounter === $h1Letters.length) {
+    if (colorDots.h1LettersCounter === colorDots.$h1Letters.length) {
       clearInterval(bounceLetters);
     }
   }
 
   function startButtonAppear() {
-    $($startArea).height(bodyHeight).css('display', 'block').addClass('animated bounceInUp');
-    const startAreaPadding = (bodyHeight - $startBtn.outerHeight() - $instructionsLink.outerHeight()) / 2;
-    $($startArea).css('padding', `${startAreaPadding}`);
+    $(colorDots.$startArea).height(bodyHeight).css('display', 'block').addClass('animated bounceInUp');
+    const startAreaPadding = (bodyHeight - colorDots.$startBtn.outerHeight() - colorDots.$instructionsLink.outerHeight()) / 2;
+    $(colorDots.$startArea).css('padding', `${startAreaPadding}`);
   }
 
   function pushUpTitle() { //Title and start btn go up
-    $($h1).animate({marginTop: '0%'}, 1000); //Btn goes up
+    $(colorDots.$h1).animate({marginTop: '0%'}, 1000); //Btn goes up
     setTimeout(startButtonAppear, 1000); //startBtn goes up
   }
 
   let closeLogic = 0;
 
   function disappearInstructions() { //Close Instructions
-    $($instructionsArea).fadeOut(2000);
+    $(colorDots.$instructionsArea).fadeOut(2000);
     if (closeLogic === 1) { //if you were in the homepage
-      $($startArea).fadeIn(); //get startArea to appear
+      $(colorDots.$startArea).fadeIn(); //get startArea to appear
       closeLogic = 0;
     } else if (closeLogic === 2) { //if you were in the game
       pauseGame();
-      $($gameOn).fadeIn(); //get Game to appear
+      $(colorDots.$gameOn).fadeIn(); //get Game to appear
       closeLogic = 0;
     }
   }
 
   function appearInstructions() { //Open Instructions
 
-    if (this === $instructionsLink[0]) {
+    if (this === colorDots.$instructionsLink[0]) {
       closeLogic = 1;
-      $($startArea).fadeOut(1000);
+      $(colorDots.$startArea).fadeOut(1000);
     } else if (this === $inGameInstrLink[0]) {
-      if (gamePaused === false) {
+      if (colorDots.gamePaused === false) {
         pauseGame();
       }
       closeLogic = 2;
-      $($gameOn).fadeOut(1000);
+      $(colorDots.$gameOn).fadeOut(1000);
     }
 
-    $($instructionsArea).fadeIn(3000);
+    $(colorDots.$instructionsArea).fadeIn(3000);
 
     //Instructions
     const $instructionsHeight = $('.instructions').height();
     const $instructionsH2Height = $('.instructions-area h2').height();
-    const $closeBtnHeight = $($closeBtn).outerHeight();
+    const $closeBtnHeight = $(colorDots.$closeBtn).outerHeight();
 
-    $($instructionsArea).height(bodyHeight).css('padding', `${(bodyHeight - $instructionsH2Height - $instructionsHeight - $closeBtnHeight) / 2}`);
+    $(colorDots.$instructionsArea).height(bodyHeight).css('padding', `${(bodyHeight - $instructionsH2Height - $instructionsHeight - $closeBtnHeight) / 2}`);
 
-    $($closeBtn).on('click', disappearInstructions);
+    $(colorDots.$closeBtn).on('click', disappearInstructions);
   }
 
   //BUTTON
@@ -321,7 +321,7 @@ function init() {
     colorDots.colors = ['#15A7A4', '#F1592A', '#F4EE34'];
 
     //Make board disappear and make game over message appear
-    $($gameArea).fadeOut('slow');
+    $(colorDots.$gameArea).fadeOut('slow');
     $($gameOver).toggleClass('animated bounceInUp').css('display', 'block');
 
     //Stop intervals
@@ -345,7 +345,7 @@ function init() {
 
       //Make game over message disappear and game board appear
       $($gameOver).fadeOut('slow').css('display', 'none');
-      $($gameArea).fadeIn('slow');
+      $(colorDots.$gameArea).fadeIn('slow');
       //Reactivate intervals for bubbles and center-dot
       startDotInterval();
       setTimeout(appearBubbles, 2000);
@@ -364,7 +364,7 @@ function init() {
 
   //Function to make bubbles disappear after 4 seconds
   function disappearBubbles() {
-    if (gamePaused === true) {
+    if (colorDots.gamePaused === true) {
       clearTimeout(colorDots.timeOutBubble);
     }
     $(`#${colorDots.timerIds}`).addClass('animated zoomOut');
@@ -458,30 +458,30 @@ function init() {
   }
 
   function pauseGame() {
-    if (gamePaused === false) {
+    if (colorDots.gamePaused === false) {
       //stop the interval
       clearInterval(colorDots.dotColors);
       clearInterval(colorDots.bubbleIntervals);
-      gamePaused = true;
+      colorDots.gamePaused = true;
       $($pauseBtn).text('PAUSED');
     } else {
       // reactivate interval
       startDotInterval();
       appearBubbles();
-      gamePaused = false;
+      colorDots.gamePaused = false;
       $($pauseBtn).text('PAUSE');
     }
   }
 
   function showGame() {
-    $($startArea).css('display', 'none');
-    $($h1).css('display', 'inline-block');
-    $($headerH3).css('display', 'inline-block');
-    $($gameOn).addClass('animated bounceInUp');
+    $(colorDots.$startArea).css('display', 'none');
+    $(colorDots.$h1).css('display', 'inline-block');
+    $(colorDots.$headerH3).css('display', 'inline-block');
+    $(colorDots.$gameOn).addClass('animated bounceInUp');
 
-    $($gameArea).css('display', 'block');
+    $(colorDots.$gameArea).css('display', 'block');
     if ($(window).width() < 530) {
-      $($h1).css('text-align', 'left');
+      $(colorDots.$h1).css('text-align', 'left');
     }
     const $pauseBtnHeight = $($pauseBtn).outerHeight();
     const otherAreaPadding = (colorDots.otherAreaHeight - $pauseBtnHeight) / 2;
@@ -496,12 +496,12 @@ function init() {
   const bounceInterval = setInterval(bounceLetters, 200);
   setTimeout(pushUpTitle, 3000);
 
-  $($instructionsLink).on('click', appearInstructions);
-  $($startBtn).on('click', showGame);
+  $(colorDots.$instructionsLink).on('click', appearInstructions);
+  $(colorDots.$startBtn).on('click', showGame);
   $($inGameInstrLink).on('click', appearInstructions);
   $($pauseBtn).on('click', pauseGame);
-  $($button).on('mouseover', changeButtonColor);
-  $($aLink).on('mouseover', changeLinkColor);
+  colorDots.$button.on('mouseover', changeButtonColor);
+  colorDots.$aLink.on('mouseover', changeLinkColor);
   $($soundIcon).on('click', soundOnOff);
 }
 
