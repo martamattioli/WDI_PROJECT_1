@@ -99,35 +99,34 @@ colorDots.pushUpTitle = function() { //Title and start btn go up
 };
 
 colorDots.changeButtonColor = function(e) { //Change button styling
-  $(e.target).css({'background-color': colorDots.colors[colorDots.colorCounter]});
-  colorDots.colorCounter++;
-  if (colorDots.colorCounter === colorDots.colors.length) {
-    colorDots.colorCounter = 0;
+  $(e.target).css({'background-color': this.colors[this.colorCounter]});
+  this.colorCounter++;
+  if (this.colorCounter === this.colors.length) {
+    this.colorCounter = 0;
   }
 };
 
 colorDots.changeLinkColor = function(e) {
-  $(e.target).css({'color': colorDots.colors[colorDots.linkColorCounter]});
-  colorDots.linkColorCounter++;
-
-  if (colorDots.linkColorCounter === colorDots.colors.length) {
-    colorDots.linkColorCounter = 0;
+  $(e.target).css({'color': this.colors[this.linkColorCounter]});
+  this.linkColorCounter++;
+  if (this.linkColorCounter === this.colors.length) {
+    this.linkColorCounter = 0;
   }
 };
 
 colorDots.disappearInstructions = function() { //Close Instructions
-  $(colorDots.$instructionsArea).fadeOut(2000);
-  if (colorDots.closeLogic === 1) { //if you were in the homepage
-    $(colorDots.$startArea).fadeIn(); //get startArea to appear
-    colorDots.closeLogic = 0;
-  } else if (colorDots.closeLogic === 2) { //if you were in the game
-    colorDots.pauseGame();
-    $(colorDots.$gameOn).fadeIn(); //get Game to appear
-    colorDots.closeLogic = 0;
+  $(this.$instructionsArea).fadeOut(2000);
+  if (this.closeLogic === 1) { //if you were in the homepage
+    $(this.$startArea).fadeIn(); //get startArea to appear
+    this.closeLogic = 0;
+  } else if (this.closeLogic === 2) { //if you were in the game
+    this.pauseGame();
+    $(this.$gameOn).fadeIn(); //get Game to appear
+    this.closeLogic = 0;
   }
 };
 
-colorDots.appearInstructions = function() { //Open Instructions
+colorDots.appearInstructions = function() { //Open Instructions <--can't use THIS here
   if (this === colorDots.$instructionsLink[0]) {
     colorDots.closeLogic = 1;
     $(colorDots.$startArea).fadeOut(1000);
@@ -148,7 +147,7 @@ colorDots.appearInstructions = function() { //Open Instructions
 
   $(colorDots.$instructionsArea).height(colorDots.bodyHeight).css('padding', `${(colorDots.bodyHeight - colorDots.$instructionsH2Height - colorDots.$instructionsHeight - colorDots.$closeBtnHeight) / 2}`);
 
-  $(colorDots.$closeBtn).on('click', colorDots.disappearInstructions);
+  $(colorDots.$closeBtn).on('click', colorDots.disappearInstructions.bind(colorDots)); //<-- callBack
 };
 
 //GAME LOGIC
@@ -482,12 +481,12 @@ colorDots.init = function() {
 
   setTimeout(this.pushUpTitle.bind(this), 3000);
 
-  this.$instructionsLink.on('click', this.appearInstructions); // <--callBack
+  this.$instructionsLink.on('click', this.appearInstructions); // <--can't bind to OBJECT
   this.$startBtn.on('click', this.showGame); // <--callBack
-  this.$inGameInstrLink.on('click', this.appearInstructions); // <--callBack
+  this.$inGameInstrLink.on('click', this.appearInstructions); // <--can't bind to OBJECT
   this.$pauseBtn.on('click', this.pauseGame); // <--callBack
-  this.$button.on('mouseover', this.changeButtonColor); // <--callBack
-  this.$aLink.on('mouseover', this.changeLinkColor); // <--callBack
+  this.$button.on('mouseover', this.changeButtonColor.bind(this));
+  this.$aLink.on('mouseover', this.changeLinkColor.bind(this));
   this.$soundIcon.on('click', this.soundOnOff); // <--callBack
 };
 
