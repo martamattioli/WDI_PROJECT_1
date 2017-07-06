@@ -3,7 +3,8 @@ title: ColorDots - WDI Project 1
 creator:
     name: Marta Mattioli
     city: London
-competencies: Programming
+competencies: Programming 
+---
 
 ![image](./images/Colordots-logo.jpg)
 
