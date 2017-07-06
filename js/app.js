@@ -153,74 +153,74 @@ colorDots.appearInstructions = function() { //Open Instructions <--can't use THI
 //GAME LOGIC
 
 colorDots.showGame = function() {
-  $(colorDots.$startArea).css('display', 'none');
-  $(colorDots.$h1).css('display', 'inline-block');
-  $(colorDots.$headerH3).css('display', 'inline-block');
-  $(colorDots.$gameOn).addClass('animated bounceInUp');
+  $(this.$startArea).css('display', 'none');
+  $(this.$h1).css('display', 'inline-block');
+  $(this.$headerH3).css('display', 'inline-block');
+  $(this.$gameOn).addClass('animated bounceInUp');
 
-  $(colorDots.$gameArea).css('display', 'block');
+  $(this.$gameArea).css('display', 'block');
   if ($(window).width() < 530) {
-    $(colorDots.$h1).css('text-align', 'left');
+    $(this.$h1).css('text-align', 'left');
   }
 
   //VARIABLE DECLARATION
-  colorDots.$pauseBtnHeight = $(colorDots.$pauseBtn).outerHeight();
-  colorDots.otherAreaPadding = (colorDots.otherAreaHeight - colorDots.$pauseBtnHeight) / 2;
+  this.$pauseBtnHeight = $(this.$pauseBtn).outerHeight();
+  this.otherAreaPadding = (this.otherAreaHeight - this.$pauseBtnHeight) / 2;
 
-  $(colorDots.$otherArea).height(colorDots.otherAreaHeight).css('padding', `${colorDots.otherAreaPadding}`);
+  $(this.$otherArea).height(this.otherAreaHeight).css('padding', `${this.otherAreaPadding}`);
 
-  $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
-  colorDots.startDotInterval();
-  setTimeout(colorDots.appearBubbles, 2000);
+  $(this.$centerDot).css('background', this.colors[this.progressColorCounter]).attr('value', this.colors[this.progressColorCounter]);
+  this.startDotInterval();
+  setTimeout(this.appearBubbles.bind(this), 2000); //<--callBack
 };
 
 //BUBBLES LOGIC
 
 //CENTER BUBBLE
 colorDots.startDotInterval = function() {
-  clearInterval(colorDots.dotColors);
-  colorDots.dotColors = setInterval(colorDots.changeDotColor, colorDots.randomIntervals); //<--callBack
+  clearInterval(this.dotColors);
+  this.dotColors = setInterval(this.changeDotColor.bind(this), this.randomIntervals); //<--callBack
 };
 
 colorDots.changeDotColor = function() {
-  $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
+  $(this.$centerDot).css('background', this.colors[this.progressColorCounter]).attr('value', this.colors[this.progressColorCounter]);
   //Progress colors index at random
-  colorDots.progressColorCounter = Math.floor(Math.random() * (colorDots.colors.length));
+  this.progressColorCounter = Math.floor(Math.random() * (this.colors.length));
   //Reassign a random number between 2 seconds and 12 seconds
-  colorDots.randomIntervals = Math.floor((Math.random() * (7000 - 2000 + 1)) + 2000);
+  this.randomIntervals = Math.floor((Math.random() * (7000 - 2000 + 1)) + 2000);
 };
 
 //BUBBLES
 //Position values of bubbles
 colorDots.xPositionExclude50 = function() {
-  colorDots.xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
-  if (colorDots.xCoordinate >= 40 && colorDots.xCoordinate <= 55) {
-    colorDots.xPositionExclude50();
+  this.xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
+  if (this.xCoordinate >= 40 && this.xCoordinate <= 55) {
+    this.xPositionExclude50();
   } else {
-    return colorDots.xCoordinate;
+    return this.xCoordinate;
   }
 };
 
 colorDots.yPositionExclude50 = function() {
-  colorDots.yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
-  if (colorDots.yCoordinate >= 40 && colorDots.yCoordinate <= 55) {
-    colorDots.yPositionExclude50();
+  this.yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
+  if (this.yCoordinate >= 40 && this.yCoordinate <= 55) {
+    this.yPositionExclude50();
   } else {
-    return colorDots.yCoordinate;
+    return this.yCoordinate;
   }
 };
 
 colorDots.addBubbles = function() {
-  colorDots.createABubble(); //add bubbles
+  this.createABubble(); //add bubbles
 
-  colorDots.xCoordinate = colorDots.xPositionExclude50();
-  colorDots.yCoordinate = colorDots.yPositionExclude50();
+  this.xCoordinate = this.xPositionExclude50();
+  this.yCoordinate = this.yPositionExclude50();
 
   //Fade out and remove divs
-  colorDots.timeOutBubble = setTimeout(colorDots.disappearBubbles, colorDots.disappearBubblesTime);
-  colorDots.bubbleIds++;
+  this.timeOutBubble = setTimeout(this.disappearBubbles.bind(this), this.disappearBubblesTime);
+  this.bubbleIds++;
 
-  colorDots.changeFreqOnScore();//Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
+  this.changeFreqOnScore();//Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
 };
 
 colorDots.checkClickEvent = function() { //If click event hasn't fired...
@@ -234,194 +234,193 @@ colorDots.checkClickEvent = function() { //If click event hasn't fired...
 
 colorDots.appearBubbles = function() { //Make bubbles appear on the screen on set intervals
   clearInterval(colorDots.bubbleIntervals);
-  colorDots.bubbleIntervals = setInterval(colorDots.addBubbles, colorDots.randomFreq); // <--callBack
+  this.bubbleIntervals = setInterval(this.addBubbles.bind(this), this.randomFreq); // <--callBack
 };
 
 colorDots.disappearBubbles = function() { //Function to make bubbles disappear after 4 seconds
-  if (colorDots.gamePaused === true) {
-    clearTimeout(colorDots.timeOutBubble);
+  if (this.gamePaused === true) {
+    clearTimeout(this.timeOutBubble);
   }
-  $(`#${colorDots.timerIds}`).addClass('animated zoomOut');
+  $(`#${this.timerIds}`).addClass('animated zoomOut');
   setTimeout( function() {
-    if (colorDots.lives > 0) { //If click event doesn't happen --> remove a life
-      colorDots.checkClickEvent();
+    if (this.lives > 0) { //If click event doesn't happen --> remove a life
+      this.checkClickEvent();
     }
-    $(`#${colorDots.removeDiv}`).remove();
-    colorDots.removeDiv++;
-  }, colorDots.disappearBubblesTime + 500);
-  colorDots.timerIds++;
+    $(`#${this.removeDiv}`).remove();
+    this.removeDiv++;
+  }, this.disappearBubblesTime + 500);
+  this.timerIds++;
 };
 
 colorDots.createABubble = function() {
   //VARIABLE DECLARATION
-  colorDots.bubbleColor = colorDots.colors[Math.floor(Math.random() * (colorDots.colors.length))];
+  this.bubbleColor = this.colors[Math.floor(Math.random() * (this.colors.length))];
 
-  $('<div/>').addClass('bubble').attr('id', `${colorDots.bubbleIds}`).attr('value', `${colorDots.bubbleColor}`).addClass('animated zoomIn').appendTo(colorDots.$gameBoard).css({
-    'left': `${colorDots.xCoordinate}%`,
-    'top': `${colorDots.yCoordinate}%`,
-    'background-color': colorDots.bubbleColor,
+  $('<div/>').addClass('bubble').attr('id', `${this.bubbleIds}`).attr('value', `${this.bubbleColor}`).addClass('animated zoomIn').appendTo(this.$gameBoard).css({
+    'left': `${this.xCoordinate}%`,
+    'top': `${this.yCoordinate}%`,
+    'background-color': this.bubbleColor,
     'padding': Math.floor((Math.random() * (30 - 10 + 1)) + 10)
-  }).one('click', colorDots.checkColor); //<--callBack
+  }).one('click', this.checkColor.bind(this)); //<--callBack
 };
 
 colorDots.checkColor = function(e) {
   $(e.target).off('click');
-  colorDots.playAudio();
-  if ($(e.target).attr('value') === $(colorDots.$centerDot).attr('value')) {
-    colorDots.score++;
-    $(colorDots.$score).html(colorDots.score);
+  this.playAudio();
+  if ($(e.target).attr('value') === $(this.$centerDot).attr('value')) {
+    this.score++;
+    $(this.$score).html(this.score);
     $(e.target).remove();
 
     //If the user made 10 points in a row and their lives are less than 3 --> add one life
-    colorDots.pointsInARow++;
-    if (colorDots.lives < 3 && colorDots.pointsInARow === 10) {
-      colorDots.lives++;
-      $(`#life-${colorDots.lives}`).fadeIn();
-    } else if (colorDots.lives === 3 && colorDots.pointsInARow === 10) {
-      colorDots.pointsInARow = 0;
+    this.pointsInARow++;
+    if (this.lives < 3 && this.pointsInARow === 10) {
+      this.lives++;
+      $(`#life-${this.lives}`).fadeIn();
+    } else if (this.lives === 3 && this.pointsInARow === 10) {
+      this.pointsInARow = 0;
     }
   } else {
-    $(`#life-${colorDots.lives}`).css('opacity', '0.3');
-    colorDots.lives--;
+    $(`#life-${this.lives}`).css('opacity', '0.3');
+    this.lives--;
     $(e.target).remove();
 
-    //If user makes a mistake, reset points in a row:
-    colorDots.pointsInARow = 0;
+    this.pointsInARow = 0; //If user makes a mistake, reset points in a row:
 
-    colorDots.checkIfAlive();
+    this.checkIfAlive();
   }
-  colorDots.changeLevelOnScore();
+  this.changeLevelOnScore();
 };
 
 //LEVELS FUNCTIONS
 colorDots.changeFreqOnScore = function() {
-  if (colorDots.score < 5) { //freq at level 1
-    colorDots.randomFreq = Math.floor((Math.random() * (1200 - 1000 + 1)) + 800);
-  } else if (colorDots.score >= 5 && colorDots.score < 10) { //freq at level 2
-    colorDots.randomFreq = Math.floor((Math.random() * (1000 - 600 + 1)) + 600);
+  if (this.score < 5) { //freq at level 1
+    this.randomFreq = Math.floor((Math.random() * (1200 - 1000 + 1)) + 800);
+  } else if (this.score >= 5 && this.score < 10) { //freq at level 2
+    this.randomFreq = Math.floor((Math.random() * (1000 - 600 + 1)) + 600);
   } else { //freq at level 3
-    colorDots.randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
+    this.randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
   }
 };
 
 colorDots.nextLevel = function(num) { //Level 2
-  colorDots.colors.push(colorDots.colorsNextLevels[num]);
+  this.colors.push(this.colorsNextLevels[num]);
 };
 
 colorDots.changeLevelOnScore = function() { //Progress Levels
-  if (colorDots.score === 5) {
-    colorDots.nextLevel(0);
-  } else if (colorDots.score === 10) {
-    colorDots.nextLevel(1);
-  } else if (colorDots.score === 13) {
-    colorDots.nextLevel(2);
+  if (this.score === 5) {
+    this.nextLevel(0);
+  } else if (this.score === 10) {
+    this.nextLevel(1);
+  } else if (this.score === 13) {
+    this.nextLevel(2);
   }
 };
 
 //GAME OVER LOGIC
 
 colorDots.stopIntervals = function() { //Stop intervals when game is OVER
-  clearTimeout(colorDots.nextLevel);
-  clearInterval(colorDots.dotColors);
-  clearInterval(colorDots.bubbleIntervals);
+  clearTimeout(this.nextLevel);
+  clearInterval(this.dotColors);
+  clearInterval(this.bubbleIntervals);
 };
 
 colorDots.checkIfAlive = function() {
-  if (colorDots.lives === 0) {
-    $(colorDots.$bubble).off('click');
-    colorDots.stopIntervals();
-    colorDots.gameOver();
+  if (this.lives === 0) {
+    $(this.$bubble).off('click');
+    this.stopIntervals();
+    this.gameOver();
   }
 };
 
+colorDots.reset = function() {
+  //Reset the colors array back to the original colors:
+  this.colors = ['#15A7A4', '#F1592A', '#F4EE34'];
+
+  //Reset lives and score
+  this.lives = 3;
+  this.score = 0;
+  this.bringLivesBack();
+
+  //Reset reandomFreq back to how it was before the levels advance
+  this.randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
+
+  //Make game over message disappear and game board appear
+  $(this.$gameOver).fadeOut('slow').css('display', 'none');
+  $(this.$gameArea).fadeIn('slow');
+
+  this.startDotInterval(); //Reactivate intervals for bubbles and center-dot
+  setTimeout(this.appearBubbles.bind(this), 2000); // <--callBack
+};
+
 colorDots.gameOver = function() { //GAME OVER
-  colorDots.colors.splice(3);
-  colorDots.highScore.push(colorDots.score);
-  colorDots.sortHighscore();
+  this.colors.splice(3);
+  this.highScore.push(this.score);
+  this.sortHighscore();
   //display high score - do not reset it
-  $(colorDots.$highScoreH3).html(colorDots.highScore[colorDots.highScore.length - 1]);
+  $(this.$highScoreH3).html(this.highScore[this.highScore.length - 1]);
 
   setTimeout(function() { //reset score to 0
-    colorDots.score = 0;
-    $(colorDots.$score).html(colorDots.score);
+    this.score = 0;
+    $(this.$score).html(this.score);
   }, 500);
 
-  colorDots.lives = 3; //reset lives to 3 and make hearts appear again
-  setTimeout(colorDots.bringLivesBack, 3000); //<-- callBack
+  this.lives = 3; //reset lives to 3 and make hearts appear again
+  setTimeout(this.bringLivesBack.bind(this), 3000); //<-- callBack
 
-  colorDots.colors = ['#15A7A4', '#F1592A', '#F4EE34']; //Reset the colors array back to the original colors
+  this.colors = ['#15A7A4', '#F1592A', '#F4EE34']; //Reset the colors array back to the original colors
 
   //Make board disappear and make game over message appear
-  $(colorDots.$gameArea).fadeOut('slow');
-  $(colorDots.$gameOver).toggleClass('animated bounceInUp').css('display', 'block');
+  $(this.$gameArea).fadeOut('slow');
+  $(this.$gameOver).toggleClass('animated bounceInUp').css('display', 'block');
 
-  colorDots.stopIntervals(); //Stop intervals
+  this.stopIntervals(); //Stop intervals
 
   setTimeout(function() {
     $(colorDots.$playAgain).addClass('animated bounceInUp').css('display', 'inline-block');
   }, 2000);
 
-  colorDots.reset = function() {
-    //Reset the colors array back to the original colors:
-    colorDots.colors = ['#15A7A4', '#F1592A', '#F4EE34'];
-
-    //Reset lives and score
-    colorDots.lives = 3;
-    colorDots.score = 0;
-    colorDots.bringLivesBack();
-
-    //Reset reandomFreq back to how it was before the levels advance
-    colorDots.randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
-
-    //Make game over message disappear and game board appear
-    $(colorDots.$gameOver).fadeOut('slow').css('display', 'none');
-    $(colorDots.$gameArea).fadeIn('slow');
-
-    colorDots.startDotInterval(); //Reactivate intervals for bubbles and center-dot
-    setTimeout(colorDots.appearBubbles, 2000); // <--callBack
-  };
-
-  colorDots.$playAgain.on('click', colorDots.reset); // <--callBack
+  this.$playAgain.on('click', this.reset.bind(this)); // <--callBack
 };
 
 //SCORING SYSTEM
 colorDots.sortHighscore = function() { //To sort high score array
-  colorDots.highScore.sort(function(a, b) {
+  this.highScore.sort(function(a, b) {
     return a-b;
   });
 };
 
 colorDots.bringLivesBack = function() { //Makes Lives go back to 3
-  $(colorDots.$lives).css('opacity', '1').toggleClass('animated pulse');
+  this.$lives.css('opacity', '1').toggleClass('animated pulse');
 };
 
 //PAUSE GAME
 colorDots.pauseGame = function() {
-  if (colorDots.gamePaused === false) {
+  if (this.gamePaused === false) {
     //stop the interval
-    clearInterval(colorDots.dotColors);
-    clearInterval(colorDots.bubbleIntervals);
-    colorDots.gamePaused = true;
-    $(colorDots.$pauseBtn).text('PAUSED');
+    clearInterval(this.dotColors);
+    clearInterval(this.bubbleIntervals);
+    this.gamePaused = true;
+    $(this.$pauseBtn).text('PAUSED');
   } else {
     // reactivate interval
-    colorDots.startDotInterval();
-    colorDots.appearBubbles();
-    colorDots.gamePaused = false;
-    $(colorDots.$pauseBtn).text('PAUSE');
+    this.startDotInterval();
+    this.appearBubbles();
+    this.gamePaused = false;
+    $(this.$pauseBtn).text('PAUSE');
   }
 };
 
 //SOUND
 colorDots.soundOnOff = function() {
-  if (colorDots.soundsOn === false) {
+  if (this.soundsOn === false) {
     $('audio').data('muted',false);
-    $(colorDots.$soundIcon).removeClass('fa-volume-off').addClass('fa-volume-up');
-    colorDots.soundsOn = true;
-  } else if (colorDots.soundsOn === true) {
+    $(this.$soundIcon).removeClass('fa-volume-off').addClass('fa-volume-up');
+    this.soundsOn = true;
+  } else if (this.soundsOn === true) {
     $('audio').data('muted',true);
-    $(colorDots.$soundIcon).removeClass('fa-volume-up').addClass('fa-volume-off');
-    colorDots.soundsOn = false;
+    $(this.$soundIcon).removeClass('fa-volume-up').addClass('fa-volume-off');
+    this.soundsOn = false;
   }
 };
 
@@ -482,12 +481,12 @@ colorDots.init = function() {
   setTimeout(this.pushUpTitle.bind(this), 3000);
 
   this.$instructionsLink.on('click', this.appearInstructions); // <--can't bind to OBJECT
-  this.$startBtn.on('click', this.showGame); // <--callBack
+  this.$startBtn.on('click', this.showGame.bind(this)); // <--callBack
   this.$inGameInstrLink.on('click', this.appearInstructions); // <--can't bind to OBJECT
-  this.$pauseBtn.on('click', this.pauseGame); // <--callBack
+  this.$pauseBtn.on('click', this.pauseGame.bind(this)); // <--callBack
   this.$button.on('mouseover', this.changeButtonColor.bind(this));
   this.$aLink.on('mouseover', this.changeLinkColor.bind(this));
-  this.$soundIcon.on('click', this.soundOnOff); // <--callBack
+  this.$soundIcon.on('click', this.soundOnOff.bind(this)); // <--callBack
 };
 
 $(colorDots.init.bind(colorDots));
