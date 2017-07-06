@@ -43,8 +43,8 @@ colorDots.bubbleIntervals;
 colorDots.randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
 colorDots.timeOutBubble;
 colorDots.bubbleIds = 0;
-var timerIds = 0;
-var removeDiv = 0;
+colorDots.timerIds = 0;
+colorDots.removeDiv = 0;
 
 //PAUSE GAME
 var gamePaused = false;
@@ -272,7 +272,7 @@ function init() {
 
   //If click event hasn't fired
   function checkClickEvent() {
-    if ($(`#${timerIds}`).attr('value') === $($centerDot).attr('value')) {
+    if ($(`#${colorDots.timerIds}`).attr('value') === $($centerDot).attr('value')) {
       $(`#life-${colorDots.lives}`).css('opacity', '0.3');
       colorDots.lives--;
       console.log(`lives if click hasn't happened: ${colorDots.lives}`);
@@ -367,16 +367,16 @@ function init() {
     if (gamePaused === true) {
       clearTimeout(colorDots.timeOutBubble);
     }
-    $(`#${timerIds}`).addClass('animated zoomOut');
+    $(`#${colorDots.timerIds}`).addClass('animated zoomOut');
     setTimeout( function() {
       //If click event doesn't happen --> remove a life
       if (colorDots.lives > 0) {
         checkClickEvent();
       }
-      $(`#${removeDiv}`).remove();
-      removeDiv++;
+      $(`#${colorDots.removeDiv}`).remove();
+      colorDots.removeDiv++;
     }, 3000);
-    timerIds++;
+    colorDots.timerIds++;
   }
 
   function createABubble() {
