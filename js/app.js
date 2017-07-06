@@ -52,7 +52,84 @@ colorDots.disappearBubblesTime = 4000;
 //PAUSE GAME
 colorDots.gamePaused = false;
 
-//Postion values of bubbles
+// --> FUNCTIONS <--
+
+//ELEMENT SIZING
+colorDots.elementSizes = function() {
+  //VARIABLE DECLARATION
+  colorDots.scrollPosition = [ //Block screen scroll
+    self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+    self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
+  ];
+  colorDots.html.data('scroll-position', colorDots.scrollPosition);
+  colorDots.html.data('previous-overflow', colorDots.html.css('overflow'));
+  colorDots.html.css('overflow', 'hidden');
+  window.scrollTo(colorDots.scrollPosition[0], colorDots.scrollPosition[1]);
+
+  colorDots.bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
+  colorDots.otherAreaHeight = colorDots.viewportHeight * 0.15;
+  colorDots.boardHeight = colorDots.viewportHeight - colorDots.headerHeight - colorDots.otherAreaHeight - 20;
+
+  //Main container
+  $(colorDots.$container).height(colorDots.viewportHeight);
+
+  //Title Area
+  colorDots.headerPadding = (colorDots.headerHeight - 30) / 2;
+  $(colorDots.$header).css('padding', `${colorDots.headerPadding}`);
+
+  //Game Area
+  $(colorDots.$gameArea).height(colorDots.bodyHeight).css('padding', `${colorDots.headerPadding}`);
+  //Game board
+  $(colorDots.$gameBoard).height(colorDots.boardHeight);
+
+  //Game over height
+  $(colorDots.$gameOver).height(colorDots.bodyHeight).css('padding', `${(colorDots.bodyHeight - 210) / 2}`);
+};
+
+colorDots.bounceLetters = function() { //Each letter of the title bouces in
+  $(colorDots.$h1Letters[colorDots.h1LettersCounter]).css('opacity', '1').addClass('animated bounce');
+
+  colorDots.h1LettersCounter++;
+
+  if (colorDots.h1LettersCounter === colorDots.$h1Letters.length) {
+    clearInterval(colorDots.bounceLetters);
+  }
+};
+
+colorDots.startButtonAppear = function() {
+  $(colorDots.$startArea).height(colorDots.bodyHeight).css('display', 'block').addClass('animated bounceInUp');
+  //VARIABLE DECLARATION:
+  colorDots.startAreaPadding = (colorDots.bodyHeight - colorDots.$startBtn.outerHeight() - colorDots.$instructionsLink.outerHeight()) / 2;
+
+  $(colorDots.$startArea).css('padding', `${colorDots.startAreaPadding}`);
+};
+
+colorDots.pushUpTitle = function() { //Title and start btn go up
+  $(colorDots.$h1).animate({marginTop: '0%'}, 1000); //Btn goes up
+  setTimeout(colorDots.startButtonAppear, 1000); //startBtn goes up
+};
+
+colorDots.changeButtonColor = function(e) { //Change button styling
+  $(e.target).css({'background-color': colorDots.colors[colorDots.colorCounter]});
+  colorDots.colorCounter++;
+
+  if (colorDots.colorCounter === colorDots.colors.length) {
+    colorDots.colorCounter = 0;
+  }
+};
+
+colorDots.changeLinkColor = function(e) {
+  $(e.target).css({'color': colorDots.colors[colorDots.linkColorCounter]});
+  colorDots.linkColorCounter++;
+
+  if (colorDots.linkColorCounter === colorDots.colors.length) {
+    colorDots.linkColorCounter = 0;
+  }
+};
+
+//GAME LOGIC
+
+//Position values of bubbles
 colorDots.xPositionExclude50 = function() {
   colorDots.xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (colorDots.xCoordinate >= 40 && colorDots.xCoordinate <= 55) {
@@ -63,18 +140,31 @@ colorDots.xPositionExclude50 = function() {
   }
 };
 
-function yPositionExclude50() {
+colorDots.yPositionExclude50 = function() {
   colorDots.yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (colorDots.yCoordinate >= 40 && colorDots.yCoordinate <= 55) {
-    yPositionExclude50();
+    colorDots.yPositionExclude50();
   } else {
     return colorDots.yCoordinate;
   }
-}
+};
 
-//GAME GLOBAL FUNCTIONS
-function changeFreqOnScore() {
-  console.log('changeFreqOnScore fired');
+//Intervals for the central dot
+colorDots.startDotInterval = function() {
+  clearInterval(colorDots.dotColors);
+  colorDots.dotColors = setInterval(colorDots.changeDotColor, colorDots.randomIntervals); //<--callBack
+};
+
+colorDots.changeDotColor = function() {
+  $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
+  //Progress colors index at random
+  colorDots.progressColorCounter = Math.floor(Math.random() * (colorDots.colors.length));
+  //Reassign a random number between 2 seconds and 12 seconds
+  colorDots.randomIntervals = Math.floor((Math.random() * (7000 - 2000 + 1)) + 2000);
+};
+
+//LEVELS FUNCTIONS
+colorDots.changeFreqOnScore = function() {
   if (colorDots.score < 5) { //freq at level 1
     colorDots.randomFreq = Math.floor((Math.random() * (1200 - 1000 + 1)) + 800);
   } else if (colorDots.score >= 5 && colorDots.score < 10) { //freq at level 2
@@ -82,21 +172,21 @@ function changeFreqOnScore() {
   } else { //freq at level 3
     colorDots.randomFreq = Math.floor((Math.random() * (1000 - 500 + 1)) + 500);
   }
-}
+};
 
-function changeLevelOnScore() { //Progress Levels
-  if (colorDots.score === 5) {
-    levelTwo(0);
-  } else if (colorDots.score === 10) {
-    levelTwo(1);
-  } else if (colorDots.score === 13) {
-    levelTwo(2);
-  }
-}
-
-function levelTwo(num) { //Level 2
+colorDots.nextLevel = function(num) { //Level 2
   colorDots.colors.push(colorDots.colorsNextLevels[num]);
-}
+};
+
+colorDots.changeLevelOnScore = function() { //Progress Levels
+  if (colorDots.score === 5) {
+    colorDots.nextLevel(0);
+  } else if (colorDots.score === 10) {
+    colorDots.nextLevel(1);
+  } else if (colorDots.score === 13) {
+    colorDots.nextLevel(2);
+  }
+};
 
 //
 //END VARIABLES
@@ -135,65 +225,11 @@ colorDots.init = function() {
   colorDots.bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
   colorDots.boardHeight = colorDots.bodyHeight - colorDots.otherAreaHeight - 20;
 
-  function elementSizes() {
-    //VARIABLE DECLARATION
-    colorDots.scrollPosition = [ //Block screen scroll
-      self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-      self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
-    ];
-    colorDots.html.data('scroll-position', colorDots.scrollPosition);
-    colorDots.html.data('previous-overflow', colorDots.html.css('overflow'));
-    colorDots.html.css('overflow', 'hidden');
-    window.scrollTo(colorDots.scrollPosition[0], colorDots.scrollPosition[1]);
+  colorDots.elementSizes();
 
-    colorDots.bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
-    colorDots.otherAreaHeight = colorDots.viewportHeight * 0.15;
-    colorDots.boardHeight = colorDots.viewportHeight - colorDots.headerHeight - colorDots.otherAreaHeight - 20;
+  $( window ).resize(colorDots.elementSizes);
 
-    //Main container
-    $(colorDots.$container).height(colorDots.viewportHeight);
-
-    //Title Area
-    colorDots.headerPadding = (colorDots.headerHeight - 30) / 2;
-    $(colorDots.$header).css('padding', `${colorDots.headerPadding}`);
-
-    //Game Area
-    $(colorDots.$gameArea).height(colorDots.bodyHeight).css('padding', `${colorDots.headerPadding}`);
-    //Game board
-    $(colorDots.$gameBoard).height(colorDots.boardHeight);
-
-    //Game over height
-    $(colorDots.$gameOver).height(colorDots.bodyHeight).css('padding', `${(colorDots.bodyHeight - 210) / 2}`);
-  }
-
-  elementSizes();
-
-  $( window ).resize(elementSizes);
-
-  function bounceLetters() { //Each letter of the title bouces in
-    $(colorDots.$h1Letters[colorDots.h1LettersCounter]).css('opacity', '1').addClass('animated bounce');
-
-    colorDots.h1LettersCounter++;
-
-    if (colorDots.h1LettersCounter === colorDots.$h1Letters.length) {
-      clearInterval(bounceLetters);
-    }
-  }
-
-  function startButtonAppear() {
-    $(colorDots.$startArea).height(colorDots.bodyHeight).css('display', 'block').addClass('animated bounceInUp');
-    //VARIABLE DECLARATION:
-    colorDots.startAreaPadding = (colorDots.bodyHeight - colorDots.$startBtn.outerHeight() - colorDots.$instructionsLink.outerHeight()) / 2;
-
-    $(colorDots.$startArea).css('padding', `${colorDots.startAreaPadding}`);
-  }
-
-  function pushUpTitle() { //Title and start btn go up
-    $(colorDots.$h1).animate({marginTop: '0%'}, 1000); //Btn goes up
-    setTimeout(startButtonAppear, 1000); //startBtn goes up
-  }
-
-  function disappearInstructions() { //Close Instructions
+  colorDots.disappearInstructions = function() { //Close Instructions
     $(colorDots.$instructionsArea).fadeOut(2000);
     if (colorDots.closeLogic === 1) { //if you were in the homepage
       $(colorDots.$startArea).fadeIn(); //get startArea to appear
@@ -203,10 +239,9 @@ colorDots.init = function() {
       $(colorDots.$gameOn).fadeIn(); //get Game to appear
       colorDots.closeLogic = 0;
     }
-  }
+  };
 
-  function appearInstructions() { //Open Instructions
-
+  colorDots.appearInstructions = function() { //Open Instructions
     if (this === colorDots.$instructionsLink[0]) {
       colorDots.closeLogic = 1;
       $(colorDots.$startArea).fadeOut(1000);
@@ -227,43 +262,8 @@ colorDots.init = function() {
 
     $(colorDots.$instructionsArea).height(colorDots.bodyHeight).css('padding', `${(colorDots.bodyHeight - colorDots.$instructionsH2Height - colorDots.$instructionsHeight - colorDots.$closeBtnHeight) / 2}`);
 
-    $(colorDots.$closeBtn).on('click', disappearInstructions);
-  }
-
-  //BUTTON
-
-  function changeButtonColor(e) {
-    $(e.target).css({'background-color': colorDots.colors[colorDots.colorCounter]});
-    colorDots.colorCounter++;
-
-    if (colorDots.colorCounter === colorDots.colors.length) {
-      colorDots.colorCounter = 0;
-    }
-  }
-
-  function changeLinkColor(e) {
-    $(e.target).css({'color': colorDots.colors[colorDots.linkColorCounter]});
-    colorDots.linkColorCounter++;
-
-    if (colorDots.linkColorCounter === colorDots.colors.length) {
-      colorDots.linkColorCounter = 0;
-    }
-  }
-
-  //GAME LOGIC
-  //Intervals for the central dot
-  function startDotInterval() {
-    clearInterval(colorDots.dotColors);
-    colorDots.dotColors = setInterval(changeDotColor, colorDots.randomIntervals);
-  }
-
-  function changeDotColor() {
-    $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
-    //Progress colors index at random
-    colorDots.progressColorCounter = Math.floor(Math.random() * (colorDots.colors.length));
-    //Reassign a random number between 2 seconds and 12 seconds
-    colorDots.randomIntervals = Math.floor((Math.random() * (7000 - 2000 + 1)) + 2000);
-  }
+    $(colorDots.$closeBtn).on('click', colorDots.disappearInstructions);
+  };
 
   function checkIfAlive() {
     if (colorDots.lives === 0) {
@@ -285,7 +285,7 @@ colorDots.init = function() {
 
   //Stop intervals when game is OVER
   function stopIntervals() {
-    clearTimeout(levelTwo);
+    clearTimeout(colorDots.nextLevel);
     clearInterval(colorDots.dotColors);
     clearInterval(colorDots.bubbleIntervals);
   }
@@ -350,7 +350,7 @@ colorDots.init = function() {
       $(colorDots.$gameOver).fadeOut('slow').css('display', 'none');
       $(colorDots.$gameArea).fadeIn('slow');
       //Reactivate intervals for bubbles and center-dot
-      startDotInterval();
+      colorDots.startDotInterval();
       setTimeout(appearBubbles, 2000);
     }
 
@@ -397,14 +397,13 @@ colorDots.init = function() {
     createABubble(); //add bubbles
 
     colorDots.xCoordinate = colorDots.xPositionExclude50();
-    colorDots.yCoordinate = yPositionExclude50();
+    colorDots.yCoordinate = colorDots.yPositionExclude50();
 
     //Fade out and remove divs
     colorDots.timeOutBubble = setTimeout(disappearBubbles, colorDots.disappearBubblesTime);
     colorDots.bubbleIds++;
 
-    //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
-    changeFreqOnScore();
+    colorDots.changeFreqOnScore();//Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
   }
 
   function soundOnOff() {
@@ -457,7 +456,7 @@ colorDots.init = function() {
       checkIfAlive();
     }
 
-    changeLevelOnScore();
+    colorDots.changeLevelOnScore();
   }
 
   function pauseGame() {
@@ -469,7 +468,7 @@ colorDots.init = function() {
       $(colorDots.$pauseBtn).text('PAUSED');
     } else {
       // reactivate interval
-      startDotInterval();
+      colorDots.startDotInterval();
       appearBubbles();
       colorDots.gamePaused = false;
       $(colorDots.$pauseBtn).text('PAUSE');
@@ -494,22 +493,22 @@ colorDots.init = function() {
     $(colorDots.$otherArea).height(colorDots.otherAreaHeight).css('padding', `${colorDots.otherAreaPadding}`);
 
     $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
-    startDotInterval();
+    colorDots.startDotInterval();
     setTimeout(appearBubbles, 2000);
   }
 
   //VARIABLE DECLARATION
-  colorDots.bounceInterval = setInterval(bounceLetters, 200);
+  colorDots.bounceInterval = setInterval(colorDots.bounceLetters, 200); // <--callBack
 
-  setTimeout(pushUpTitle, 3000);
+  setTimeout(colorDots.pushUpTitle, 3000);
 
-  colorDots.$instructionsLink.on('click', appearInstructions);
-  colorDots.$startBtn.on('click', showGame);
-  colorDots.$inGameInstrLink.on('click', appearInstructions);
-  colorDots.$pauseBtn.on('click', pauseGame);
-  colorDots.$button.on('mouseover', changeButtonColor);
-  colorDots.$aLink.on('mouseover', changeLinkColor);
-  colorDots.$soundIcon.on('click', soundOnOff);
+  colorDots.$instructionsLink.on('click', colorDots.appearInstructions); // <--callBack
+  colorDots.$startBtn.on('click', showGame); // <--callBack
+  colorDots.$inGameInstrLink.on('click', colorDots.appearInstructions); // <--callBack
+  colorDots.$pauseBtn.on('click', pauseGame); // <--callBack
+  colorDots.$button.on('mouseover', colorDots.changeButtonColor); // <--callBack
+  colorDots.$aLink.on('mouseover', colorDots.changeLinkColor); // <--callBack
+  colorDots.$soundIcon.on('click', soundOnOff); // <--callBack
 };
 
 $(colorDots.init.bind(colorDots));
