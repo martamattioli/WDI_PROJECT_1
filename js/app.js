@@ -1,13 +1,14 @@
 //For positioning
 var viewportHeight = $(window).height();
-// var headerHeight = viewportHeight * 0.12;
 var headerHeight = 71.27;
-// var bodyHeight = viewportHeight * 0.88;
-// var bodyHeight = viewportHeight - headerHeight;
 var otherAreaHeight = viewportHeight * 0.15;
 
 //For animations
 let h1LettersCounter = 0;
+
+//For STYLING
+let colorCounter = 0;
+let linkColorCounter = 1;
 
 //For the game
 //SCORE variables
@@ -17,8 +18,13 @@ var lives = 3;
 var pointsInARow = 0;
 
 //Variable for color array
-var colorsNextLevels = ['#5ba349', '#ab2346', '#274690'];
-var colors = ['#7ddf64', '#de5360', '#3e92cc'];
+var colorsNextLevels = ['#F9F590', '#7FCFCD', '#F7A48A'];
+var colors = ['#15A7A4', '#F1592A', '#F4EE34'];
+
+//Variables for sounds
+var soundsCounter = 0;
+var sounds = ['Concussive_Guitar_Hit', 'Slide_Whistle_to_Drum', 'Tympani_Bing', 'Deflate', 'Metallic_Clank'];
+var soundsOn = false;
 
 //Variables for the central dot
 var progressColorCounter = 0;
@@ -26,7 +32,6 @@ var dotColors;
 var randomIntervals = Math.floor((Math.random() * (10000 - 2000 + 1)) + 2000);
 
 //Bubbles positioning
-// !!!!!!! Not sure why, but sometimes it gives me undefined %
 var paddingNow;
 var xCoordinate = xPositionExclude50();
 var yCoordinate = yPositionExclude50();
@@ -46,11 +51,8 @@ var gamePaused = false;
 function xPositionExclude50() {
   xCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (xCoordinate >= 40 && xCoordinate <= 55) {
-    // console.log(`xoops.. ${xCoordinate}`);
     xPositionExclude50();
   } else {
-    // console.log(`xbetter.. ${xCoordinate}`);
-    // console.log('X:', typeof xCoordinate, xCoordinate);
     return xCoordinate;
   }
 }
@@ -58,11 +60,8 @@ function xPositionExclude50() {
 function yPositionExclude50() {
   yCoordinate = Math.floor((Math.random() * (80 - 20 + 1)) + 20);
   if (yCoordinate >= 40 && yCoordinate <= 55) {
-    // console.log(`yoops.. ${yCoordinate}`);
     yPositionExclude50();
   } else {
-    // console.log(`ybetter.. ${yCoordinate}`);
-    // console.log('Y:',typeof yCoordinate, yCoordinate);
     return yCoordinate;
   }
 }
@@ -91,7 +90,6 @@ function changeLevelOnScore() { //Progress Levels
 
 function levelTwo(num) { //Level 2
   colors.push(colorsNextLevels[num]);
-  console.log(colors);
 }
 
 //
@@ -102,6 +100,8 @@ function init() {
   //Grab elements
   const html = $('html'); //MAIN CONTAINERS VARS
   const $container = $('.container');
+  const $button = $('button');
+  const $aLink = $('a');
   const $header = $('header'); //HEADER VARS
   const $h1Letters = $('h1 span');
   const $h1 = $('h1');
@@ -118,6 +118,7 @@ function init() {
   const $bubble = $('.bubble');
   const $lives = $('.lives');
   const $pauseBtn = $('#pause');
+  const $soundIcon = $('i');
   const $otherArea = $('.other-area');
   const $inGameInstrLink = $('.instructions-link a');
   const $gameBoard = $('.game-board');
@@ -129,8 +130,7 @@ function init() {
   let boardHeight = bodyHeight - otherAreaHeight - 20;
 
   function elementSizes() {
-    // console.log('I fired');
-    var scrollPosition = [
+    var scrollPosition = [ //Block screen scroll
       self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
       self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
     ];
@@ -157,7 +157,7 @@ function init() {
     $($gameBoard).height(boardHeight);
 
     //Game over height
-    $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - 110) / 2}`);
+    $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - 210) / 2}`);
   }
 
   elementSizes();
@@ -224,6 +224,27 @@ function init() {
     $($closeBtn).on('click', disappearInstructions);
   }
 
+  //BUTTON
+
+  function changeButtonColor(e) {
+    $(e.target).css({'background-color': colors[colorCounter]});
+    colorCounter++;
+
+    if (colorCounter === colors.length) {
+      colorCounter = 0;
+    }
+  }
+
+  function changeLinkColor(e) {
+    $(e.target).css({'color': colors[linkColorCounter]});
+    console.log(linkColorCounter);
+    linkColorCounter++;
+
+    if (linkColorCounter === colors.length) {
+      linkColorCounter = 0;
+    }
+  }
+
   //GAME LOGIC
   //Intervals for the central dot
   function startDotInterval() {
@@ -240,7 +261,6 @@ function init() {
   }
 
   function checkIfAlive() {
-    console.log('checkIfAlive fired');
     if (lives === 0) {
       $($bubble).off('click');
       stopIntervals();
@@ -260,7 +280,6 @@ function init() {
 
   //Stop intervals when game is OVER
   function stopIntervals() {
-    // console.log('stopIntervals() has fired');
     clearTimeout(levelTwo);
     clearInterval(dotColors);
     clearInterval(bubbleIntervals);
@@ -280,14 +299,9 @@ function init() {
 
   //GAME OVER
   function gameOver() {
-    console.log('Game OVER');
     colors.splice(3);
-    console.log(colors);
-
     highScore.push(score);
-    // console.log(`High score array: ${highScore}`);
     sortHighscore();
-    // console.log(`High score array after sort: ${highScore}`);
     //display high score - do not reset it
     $($highScoreH3).html(highScore[highScore.length - 1]);
 
@@ -302,7 +316,7 @@ function init() {
     setTimeout(bringLivesBack, 3000);
 
     //Reset the colors array back to the original colors:
-    colors = ['#7ddf64', '#de5360', '#3e92cc'];
+    colors = ['#15A7A4', '#F1592A', '#F4EE34'];
 
     //Make board disappear and make game over message appear
     $($gameArea).fadeOut('slow');
@@ -317,7 +331,7 @@ function init() {
 
     function reset() {
       //Reset the colors array back to the original colors:
-      colors = ['#7ddf64', '#de5360', '#3e92cc'];
+      colors = ['#15A7A4', '#F1592A', '#F4EE34'];
 
       //Reset lives and score
       lives = 3;
@@ -377,8 +391,6 @@ function init() {
   function addBubbles() {
     createABubble(); //add bubbles
 
-    // console.log(xCoordinate, yCoordinate); //!!!!!!! SOMETIMES XCOORDINATE AND Y COORDINATE ARE UNDEFINED... WHY??
-
     xCoordinate = xPositionExclude50();
     yCoordinate = yPositionExclude50();
 
@@ -390,17 +402,39 @@ function init() {
     changeFreqOnScore();
   }
 
+  function soundOnOff() {
+    if (soundsOn === false) {
+      $('audio').data('muted',false);
+      $($soundIcon).removeClass('fa-volume-off').addClass('fa-volume-up');
+      soundsOn = true;
+    } else if (soundsOn === true) {
+      $('audio').data('muted',true);
+      $($soundIcon).removeClass('fa-volume-up').addClass('fa-volume-off');
+      soundsOn = false;
+    }
+  }
+
+  function playAudio() {
+    if (soundsOn === true) {
+      new Audio(`./sounds/${sounds[soundsCounter]}.mp3`).play();
+      if (soundsCounter === sounds.length - 1) {
+        soundsCounter = 0;
+      } else {
+        soundsCounter++;
+      }
+    }
+  }
+
   function checkColor(e) {
     $(e.target).off('click');
+    playAudio();
     if ($(e.target).attr('value') === $($centerDot).attr('value')) {
-      console.log(`clickedVal: ${$(e.target).attr('id')}`, `dotVal: ${$($centerDot).attr('value')}`, 'YAY');
       score++;
       $($score).html(score);
       $(e.target).remove();
 
       //If the user made 10 points in a row and their lives are less than 3 --> add one life
       pointsInARow++;
-      console.log(`pointsInARow: ${pointsInARow}`);
       if (lives < 3 && pointsInARow === 10) {
         lives++;
         $(`#life-${lives}`).fadeIn();
@@ -408,11 +442,9 @@ function init() {
         pointsInARow = 0;
       }
     } else {
-      console.log(`clickedVal: ${$(e.target).attr('value')}`, `dotVal: ${$($centerDot).attr('value')}`, 'OH NO');
       $(`#life-${lives}`).css('opacity', '0.3');
       lives--;
       console.log(`Score: ${score}`);
-      // console.log(`Lives: ${lives}`);
       $(e.target).remove();
 
       //If user makes a mistake, reset points in a row:
@@ -430,14 +462,13 @@ function init() {
       clearInterval(dotColors);
       clearInterval(bubbleIntervals);
       gamePaused = true;
-      console.log(gamePaused, 'the game should pause');
+      $($pauseBtn).text('PAUSED');
     } else {
-      console.log(gamePaused, 'before reactivate interval');
       // reactivate interval
       startDotInterval();
       appearBubbles();
       gamePaused = false;
-      console.log(gamePaused, 'the game should reactivate');
+      $($pauseBtn).text('PAUSE');
     }
   }
 
@@ -448,7 +479,9 @@ function init() {
     $($gameOn).addClass('animated bounceInUp');
 
     $($gameArea).css('display', 'block');
-
+    if ($(window).width() < 530) {
+      $($h1).css('text-align', 'left');
+    }
     const $pauseBtnHeight = $($pauseBtn).outerHeight();
     const otherAreaPadding = (otherAreaHeight - $pauseBtnHeight) / 2;
 
@@ -465,12 +498,10 @@ function init() {
   $($instructionsLink).on('click', appearInstructions);
   $($startBtn).on('click', showGame);
   $($inGameInstrLink).on('click', appearInstructions);
-  $('#pause').on('click', pauseGame);
-  console.log($('button'));
-  $('.start-area button').on('mouseover', () => {
-    console.log('event fired');
-    $(this).css('background-color', `${colors[Math.floor(Math.random() * (colors.length))]}!important`);
-  });
+  $($pauseBtn).on('click', pauseGame);
+  $($button).on('mouseover', changeButtonColor);
+  $($aLink).on('mouseover', changeLinkColor);
+  $($soundIcon).on('click', soundOnOff);
 }
 
 $(init);

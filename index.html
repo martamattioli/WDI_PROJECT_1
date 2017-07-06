@@ -9,6 +9,7 @@
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
     <script src="./js/app.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700" rel="stylesheet">
     <link rel="stylesheet" href="./css/reset.css">
@@ -38,16 +39,20 @@
       </header>
       <main>
         <div class="start-area">
-          <button>START GAME</button>
+          <button type="button">START GAME</button>
           <a href="#">Instructions</a>
         </div>
         <div class="game-area game-on">
           <div class="other-area">
-            <div class="pause-div">
-              <button id="pause">PAUSE</button>
-            </div>
             <div class="instructions-link">
               <a href="#">Instructions</a>
+            </div>
+            <div class="pause-div">
+              <button id="pause" type="button">PAUSE</button>
+            </div>
+            <div class="sound-on-off">
+              <i class="fa fa-volume-off" aria-hidden="true"></i>
+              <!-- <i class="fa fa-volume-off" aria-hidden="true"></i> -->
             </div>
           </div>
           <div class="game-board">
@@ -76,9 +81,10 @@
         </div>
         <div class="game-over">
           <h2>GAME OVER</h2>
-          <div class="play-again">PLAY AGAIN</div>
+          <button class="play-again" type="button">PLAY AGAIN</button>
           <!-- ADD NEW HIGH SCORE MESSAGE -->
         </div>
+        <audio></audio>
       </main>
     </div>
   </body>
