@@ -11,6 +11,7 @@ colorDots.h1LettersCounter = 0;
 //For STYLING
 colorDots.colorCounter = 0;
 colorDots.linkColorCounter = 1;
+colorDots.closeLogic = 0;
 
 //For the game
 //SCORE variables
@@ -45,6 +46,8 @@ colorDots.timeOutBubble;
 colorDots.bubbleIds = 0;
 colorDots.timerIds = 0;
 colorDots.removeDiv = 0;
+colorDots.disappearBubblesTime = 4000;
+
 
 //PAUSE GAME
 colorDots.gamePaused = false;
@@ -115,51 +118,51 @@ function init() {
   colorDots.$closeBtn = $('.instructions-area button');
   colorDots.$gameArea = $('.game-area'); //GAME VARS
   colorDots.$gameOn = $('.game-on');
-  const $score = $('#score');
-  const $centerDot = $('.center-dot');
-  const $bubble = $('.bubble');
-  const $lives = $('.lives');
-  const $pauseBtn = $('#pause');
-  const $soundIcon = $('i');
-  const $otherArea = $('.other-area');
-  const $inGameInstrLink = $('.instructions-link a');
-  const $gameBoard = $('.game-board');
-  const $gameOver = $('.game-over');
-  const $playAgain = $('.play-again');
-  const $highScoreH3 = $('.high-score');
+  colorDots.$score = $('#score');
+  colorDots.$centerDot = $('.center-dot');
+  colorDots.$bubble = $('.bubble');
+  colorDots.$lives = $('.lives');
+  colorDots.$pauseBtn = $('#pause');
+  colorDots.$soundIcon = $('i');
+  colorDots.$otherArea = $('.other-area');
+  colorDots.$inGameInstrLink = $('.instructions-link a');
+  colorDots.$gameBoard = $('.game-board');
+  colorDots.$gameOver = $('.game-over');
+  colorDots.$playAgain = $('.play-again');
+  colorDots.$highScoreH3 = $('.high-score');
 
-  let bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
-  let boardHeight = bodyHeight - colorDots.otherAreaHeight - 20;
+  colorDots.bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
+  colorDots.boardHeight = colorDots.bodyHeight - colorDots.otherAreaHeight - 20;
 
   function elementSizes() {
-    var scrollPosition = [ //Block screen scroll
+    //VARIABLE DECLARATION
+    colorDots.scrollPosition = [ //Block screen scroll
       self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
       self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
     ];
-
-    colorDots.html.data('scroll-position', scrollPosition);
+    colorDots.html.data('scroll-position', colorDots.scrollPosition);
     colorDots.html.data('previous-overflow', colorDots.html.css('overflow'));
     colorDots.html.css('overflow', 'hidden');
-    window.scrollTo(scrollPosition[0], scrollPosition[1]);
+    window.scrollTo(colorDots.scrollPosition[0], colorDots.scrollPosition[1]);
 
-    bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
+    colorDots.bodyHeight = colorDots.viewportHeight - colorDots.$header.outerHeight();
     colorDots.otherAreaHeight = colorDots.viewportHeight * 0.15;
-    boardHeight = colorDots.viewportHeight - colorDots.headerHeight - colorDots.otherAreaHeight - 20;
+    colorDots.boardHeight = colorDots.viewportHeight - colorDots.headerHeight - colorDots.otherAreaHeight - 20;
 
     //Main container
     $(colorDots.$container).height(colorDots.viewportHeight);
 
     //Title Area
-    var headerPadding = (colorDots.headerHeight - 30) / 2;
-    $(colorDots.$header).css('padding', `${headerPadding}`);
+    colorDots.headerPadding = (colorDots.headerHeight - 30) / 2;
+    $(colorDots.$header).css('padding', `${colorDots.headerPadding}`);
 
     //Game Area
-    $(colorDots.$gameArea).height(bodyHeight).css('padding', `${headerPadding}`);
+    $(colorDots.$gameArea).height(colorDots.bodyHeight).css('padding', `${colorDots.headerPadding}`);
     //Game board
-    $($gameBoard).height(boardHeight);
+    $(colorDots.$gameBoard).height(colorDots.boardHeight);
 
     //Game over height
-    $($gameOver).height(bodyHeight).css('padding', `${(bodyHeight - 210) / 2}`);
+    $(colorDots.$gameOver).height(colorDots.bodyHeight).css('padding', `${(colorDots.bodyHeight - 210) / 2}`);
   }
 
   elementSizes();
@@ -177,9 +180,11 @@ function init() {
   }
 
   function startButtonAppear() {
-    $(colorDots.$startArea).height(bodyHeight).css('display', 'block').addClass('animated bounceInUp');
-    const startAreaPadding = (bodyHeight - colorDots.$startBtn.outerHeight() - colorDots.$instructionsLink.outerHeight()) / 2;
-    $(colorDots.$startArea).css('padding', `${startAreaPadding}`);
+    $(colorDots.$startArea).height(colorDots.bodyHeight).css('display', 'block').addClass('animated bounceInUp');
+    //VARIABLE DECLARATION:
+    colorDots.startAreaPadding = (colorDots.bodyHeight - colorDots.$startBtn.outerHeight() - colorDots.$instructionsLink.outerHeight()) / 2;
+
+    $(colorDots.$startArea).css('padding', `${colorDots.startAreaPadding}`);
   }
 
   function pushUpTitle() { //Title and start btn go up
@@ -187,41 +192,39 @@ function init() {
     setTimeout(startButtonAppear, 1000); //startBtn goes up
   }
 
-  let closeLogic = 0;
-
   function disappearInstructions() { //Close Instructions
     $(colorDots.$instructionsArea).fadeOut(2000);
-    if (closeLogic === 1) { //if you were in the homepage
+    if (colorDots.closeLogic === 1) { //if you were in the homepage
       $(colorDots.$startArea).fadeIn(); //get startArea to appear
-      closeLogic = 0;
-    } else if (closeLogic === 2) { //if you were in the game
+      colorDots.closeLogic = 0;
+    } else if (colorDots.closeLogic === 2) { //if you were in the game
       pauseGame();
       $(colorDots.$gameOn).fadeIn(); //get Game to appear
-      closeLogic = 0;
+      colorDots.closeLogic = 0;
     }
   }
 
   function appearInstructions() { //Open Instructions
 
     if (this === colorDots.$instructionsLink[0]) {
-      closeLogic = 1;
+      colorDots.closeLogic = 1;
       $(colorDots.$startArea).fadeOut(1000);
-    } else if (this === $inGameInstrLink[0]) {
+    } else if (this === colorDots.$inGameInstrLink[0]) {
       if (colorDots.gamePaused === false) {
         pauseGame();
       }
-      closeLogic = 2;
+      colorDots.closeLogic = 2;
       $(colorDots.$gameOn).fadeOut(1000);
     }
 
     $(colorDots.$instructionsArea).fadeIn(3000);
 
-    //Instructions
-    const $instructionsHeight = $('.instructions').height();
-    const $instructionsH2Height = $('.instructions-area h2').height();
-    const $closeBtnHeight = $(colorDots.$closeBtn).outerHeight();
+    //VARIABLE DECLARATIONS
+    colorDots.$instructionsHeight = $('.instructions').height();
+    colorDots.$instructionsH2Height = $('.instructions-area h2').height();
+    colorDots.$closeBtnHeight = $(colorDots.$closeBtn).outerHeight();
 
-    $(colorDots.$instructionsArea).height(bodyHeight).css('padding', `${(bodyHeight - $instructionsH2Height - $instructionsHeight - $closeBtnHeight) / 2}`);
+    $(colorDots.$instructionsArea).height(colorDots.bodyHeight).css('padding', `${(colorDots.bodyHeight - colorDots.$instructionsH2Height - colorDots.$instructionsHeight - colorDots.$closeBtnHeight) / 2}`);
 
     $(colorDots.$closeBtn).on('click', disappearInstructions);
   }
@@ -239,7 +242,6 @@ function init() {
 
   function changeLinkColor(e) {
     $(e.target).css({'color': colorDots.colors[colorDots.linkColorCounter]});
-    console.log(colorDots.linkColorCounter);
     colorDots.linkColorCounter++;
 
     if (colorDots.linkColorCounter === colorDots.colors.length) {
@@ -255,7 +257,7 @@ function init() {
   }
 
   function changeDotColor() {
-    $($centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
+    $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
     //Progress colors index at random
     colorDots.progressColorCounter = Math.floor(Math.random() * (colorDots.colors.length));
     //Reassign a random number between 2 seconds and 12 seconds
@@ -264,7 +266,7 @@ function init() {
 
   function checkIfAlive() {
     if (colorDots.lives === 0) {
-      $($bubble).off('click');
+      $(colorDots.$bubble).off('click');
       stopIntervals();
       gameOver();
     }
@@ -272,7 +274,7 @@ function init() {
 
   //If click event hasn't fired
   function checkClickEvent() {
-    if ($(`#${colorDots.timerIds}`).attr('value') === $($centerDot).attr('value')) {
+    if ($(`#${colorDots.timerIds}`).attr('value') === $(colorDots.$centerDot).attr('value')) {
       $(`#life-${colorDots.lives}`).css('opacity', '0.3');
       colorDots.lives--;
       console.log(`lives if click hasn't happened: ${colorDots.lives}`);
@@ -296,7 +298,7 @@ function init() {
 
   //Brings lives background
   function bringLivesBack() {
-    $($lives).css('opacity', '1').toggleClass('animated pulse');
+    $(colorDots.$lives).css('opacity', '1').toggleClass('animated pulse');
   }
 
   //GAME OVER
@@ -305,12 +307,12 @@ function init() {
     colorDots.highScore.push(colorDots.score);
     sortHighscore();
     //display high score - do not reset it
-    $($highScoreH3).html(colorDots.highScore[colorDots.highScore.length - 1]);
+    $(colorDots.$highScoreH3).html(colorDots.highScore[colorDots.highScore.length - 1]);
 
     //reset score to 0
     setTimeout(function() {
       colorDots.score = 0;
-      $($score).html(colorDots.score);
+      $(colorDots.$score).html(colorDots.score);
     }, 500);
 
     //reset lives to 3 and make hearts appear again
@@ -322,13 +324,13 @@ function init() {
 
     //Make board disappear and make game over message appear
     $(colorDots.$gameArea).fadeOut('slow');
-    $($gameOver).toggleClass('animated bounceInUp').css('display', 'block');
+    $(colorDots.$gameOver).toggleClass('animated bounceInUp').css('display', 'block');
 
     //Stop intervals
     stopIntervals();
 
     setTimeout(function() {
-      $($playAgain).addClass('animated bounceInUp').css('display', 'inline-block');
+      $(colorDots.$playAgain).addClass('animated bounceInUp').css('display', 'inline-block');
     }, 2000);
 
     function reset() {
@@ -344,7 +346,7 @@ function init() {
       colorDots.randomFreq = Math.floor((Math.random() * (1500 - 1000 + 1)) + 1000);
 
       //Make game over message disappear and game board appear
-      $($gameOver).fadeOut('slow').css('display', 'none');
+      $(colorDots.$gameOver).fadeOut('slow').css('display', 'none');
       $(colorDots.$gameArea).fadeIn('slow');
       //Reactivate intervals for bubbles and center-dot
       startDotInterval();
@@ -352,7 +354,7 @@ function init() {
     }
 
     //If user clicks on PLAY AGAIN BUTTON
-    $($playAgain).on('click', reset);
+    $(colorDots.$playAgain).on('click', reset);
   }
 
   //Intervals for various bubbles
@@ -369,23 +371,23 @@ function init() {
     }
     $(`#${colorDots.timerIds}`).addClass('animated zoomOut');
     setTimeout( function() {
-      //If click event doesn't happen --> remove a life
-      if (colorDots.lives > 0) {
+      if (colorDots.lives > 0) { //If click event doesn't happen --> remove a life
         checkClickEvent();
       }
       $(`#${colorDots.removeDiv}`).remove();
       colorDots.removeDiv++;
-    }, 3000);
+    }, colorDots.disappearBubblesTime);
     colorDots.timerIds++;
   }
 
   function createABubble() {
-    var bubbleColor = colorDots.colors[Math.floor(Math.random() * (colorDots.colors.length))];
+    //VARIABLE DECLARATION
+    colorDots.bubbleColor = colorDots.colors[Math.floor(Math.random() * (colorDots.colors.length))];
 
-    $('<div/>').addClass('bubble').attr('id', `${colorDots.bubbleIds}`).attr('value', `${bubbleColor}`).addClass('animated zoomIn').appendTo($gameBoard).css({
+    $('<div/>').addClass('bubble').attr('id', `${colorDots.bubbleIds}`).attr('value', `${colorDots.bubbleColor}`).addClass('animated zoomIn').appendTo(colorDots.$gameBoard).css({
       'left': `${colorDots.xCoordinate}%`,
       'top': `${colorDots.yCoordinate}%`,
-      'background-color': bubbleColor,
+      'background-color': colorDots.bubbleColor,
       'padding': Math.floor((Math.random() * (30 - 10 + 1)) + 10)
     }).one('click', checkColor);
   }
@@ -397,7 +399,7 @@ function init() {
     colorDots.yCoordinate = yPositionExclude50();
 
     //Fade out and remove divs
-    colorDots.timeOutBubble = setTimeout(disappearBubbles, 4000);
+    colorDots.timeOutBubble = setTimeout(disappearBubbles, colorDots.disappearBubblesTime);
     colorDots.bubbleIds++;
 
     //Give a new random number between 1 and 3 seconds to the frequency of bubble appearance
@@ -407,11 +409,11 @@ function init() {
   function soundOnOff() {
     if (colorDots.soundsOn === false) {
       $('audio').data('muted',false);
-      $($soundIcon).removeClass('fa-volume-off').addClass('fa-volume-up');
+      $(colorDots.$soundIcon).removeClass('fa-volume-off').addClass('fa-volume-up');
       colorDots.soundsOn = true;
     } else if (colorDots.soundsOn === true) {
       $('audio').data('muted',true);
-      $($soundIcon).removeClass('fa-volume-up').addClass('fa-volume-off');
+      $(colorDots.$soundIcon).removeClass('fa-volume-up').addClass('fa-volume-off');
       colorDots.soundsOn = false;
     }
   }
@@ -430,9 +432,9 @@ function init() {
   function checkColor(e) {
     $(e.target).off('click');
     playAudio();
-    if ($(e.target).attr('value') === $($centerDot).attr('value')) {
+    if ($(e.target).attr('value') === $(colorDots.$centerDot).attr('value')) {
       colorDots.score++;
-      $($score).html(colorDots.score);
+      $(colorDots.$score).html(colorDots.score);
       $(e.target).remove();
 
       //If the user made 10 points in a row and their lives are less than 3 --> add one life
@@ -463,13 +465,13 @@ function init() {
       clearInterval(colorDots.dotColors);
       clearInterval(colorDots.bubbleIntervals);
       colorDots.gamePaused = true;
-      $($pauseBtn).text('PAUSED');
+      $(colorDots.$pauseBtn).text('PAUSED');
     } else {
       // reactivate interval
       startDotInterval();
       appearBubbles();
       colorDots.gamePaused = false;
-      $($pauseBtn).text('PAUSE');
+      $(colorDots.$pauseBtn).text('PAUSE');
     }
   }
 
@@ -483,26 +485,30 @@ function init() {
     if ($(window).width() < 530) {
       $(colorDots.$h1).css('text-align', 'left');
     }
-    const $pauseBtnHeight = $($pauseBtn).outerHeight();
-    const otherAreaPadding = (colorDots.otherAreaHeight - $pauseBtnHeight) / 2;
 
-    $($otherArea).height(colorDots.otherAreaHeight).css('padding', `${otherAreaPadding}`);
+    //VARIABLE DECLARATION
+    colorDots.$pauseBtnHeight = $(colorDots.$pauseBtn).outerHeight();
+    colorDots.otherAreaPadding = (colorDots.otherAreaHeight - colorDots.$pauseBtnHeight) / 2;
 
-    $($centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
+    $(colorDots.$otherArea).height(colorDots.otherAreaHeight).css('padding', `${colorDots.otherAreaPadding}`);
+
+    $(colorDots.$centerDot).css('background', colorDots.colors[colorDots.progressColorCounter]).attr('value', colorDots.colors[colorDots.progressColorCounter]);
     startDotInterval();
     setTimeout(appearBubbles, 2000);
   }
 
-  const bounceInterval = setInterval(bounceLetters, 200);
+  //VARIABLE DECLARATION
+  colorDots.bounceInterval = setInterval(bounceLetters, 200);
+
   setTimeout(pushUpTitle, 3000);
 
-  $(colorDots.$instructionsLink).on('click', appearInstructions);
-  $(colorDots.$startBtn).on('click', showGame);
-  $($inGameInstrLink).on('click', appearInstructions);
-  $($pauseBtn).on('click', pauseGame);
+  colorDots.$instructionsLink.on('click', appearInstructions);
+  colorDots.$startBtn.on('click', showGame);
+  colorDots.$inGameInstrLink.on('click', appearInstructions);
+  colorDots.$pauseBtn.on('click', pauseGame);
   colorDots.$button.on('mouseover', changeButtonColor);
   colorDots.$aLink.on('mouseover', changeLinkColor);
-  $($soundIcon).on('click', soundOnOff);
+  colorDots.$soundIcon.on('click', soundOnOff);
 }
 
 $(init);
