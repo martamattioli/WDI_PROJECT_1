@@ -36,6 +36,7 @@ My biggest focus for this task was UI and animations.
 ---
 
 ![image](./images/ColorDots-Board.png 'Game Board')
+
 Game board
 
 ---
@@ -64,9 +65,6 @@ This project allowed me to sediment all the concepts we learned in class, for ex
 
 
 **Thanks for watching!!**
-
-
-
 
 
 
