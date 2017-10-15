@@ -131,9 +131,7 @@ colorDots.appearInstructions = function() { //Open Instructions <--can't use THI
     colorDots.closeLogic = 1;
     colorDots.$startArea.fadeOut(1000);
   } else if (this === colorDots.$inGameInstrLink[0]) {
-    if (colorDots.gamePaused === false) {
-      colorDots.pauseGame();
-    }
+    if (colorDots.gamePaused === false) colorDots.pauseGame();
     colorDots.closeLogic = 2;
     colorDots.$gameOn.fadeOut(1000);
   }
@@ -159,9 +157,7 @@ colorDots.showGame = function() {
   this.$gameOn.addClass('animated bounceInUp');
 
   this.$gameArea.css('display', 'block');
-  if ($(window).width() < 530) {
-    this.$h1.css('text-align', 'left');
-  }
+  if ($(window).width() < 530) this.$h1.css('text-align', 'left');
 
   //VARIABLE DECLARATION
   this.$pauseBtnHeight = $(this.$pauseBtn).outerHeight();
@@ -236,19 +232,17 @@ colorDots.appearBubbles = function() { //Make bubbles appear on the screen on se
   this.bubbleIntervals = setInterval(this.addBubbles.bind(this), this.randomFreq);
 };
 
-colorDots.disappearBubbles = function() { //Function to make bubbles disappear after 4 seconds
-  if (this.gamePaused === true) {
-    clearTimeout(this.timeOutBubble);
-  }
+colorDots.disappearBubbles = function() { //make bubbles disappear after 4 seconds
+  if (this.gamePaused === true) clearTimeout(this.timeOutBubble);
   $(`#${this.timerIds}`).addClass('animated zoomOut');
-  setTimeout( function() {
-    if (colorDots.lives > 0) { //If click event doesn't happen --> remove a life
-      colorDots.checkClickEvent();
-    }
-    $(`#${colorDots.removeDiv}`).remove();
-    colorDots.removeDiv++;
-  }, colorDots.disappearBubblesTime);
+  this.waitToDisappear = setTimeout(colorDots.checkClickRemoveDiv, colorDots.disappearBubblesTime);
   this.timerIds++;
+};
+
+colorDots.checkClickRemoveDiv = function() {
+  if (colorDots.lives > 0) colorDots.checkClickEvent();
+  $(`#${colorDots.removeDiv}`).remove();
+  colorDots.removeDiv++;
 };
 
 colorDots.createABubble = function() {
@@ -322,6 +316,7 @@ colorDots.stopIntervals = function() { //Stop intervals when game is OVER
   clearTimeout(this.nextLevel);
   clearInterval(this.dotColors);
   clearInterval(this.bubbleIntervals);
+  clearTimeout(this.waitToDisappear);
 };
 
 colorDots.checkIfAlive = function() {
@@ -354,15 +349,10 @@ colorDots.reset = function() {
 
 colorDots.gameOver = function() { //GAME OVER
   this.colors.splice(3);
-  this.highScore.push(this.score);
-  this.sortHighscore();
-  //display high score - do not reset it
-  this.$highScoreH3.html(this.highScore[this.highScore.length - 1]);
+  // this.highScore.push(this.score);
+  this.checkHighscore();
 
-  setTimeout(function() { //reset score to 0
-    this.score = 0;
-    $(this.$score).html(this.score);
-  }, 500);
+  setTimeout(this.resetScore, 500);
 
   this.lives = 3; //reset lives to 3 and make hearts appear again
   setTimeout(this.bringLivesBack.bind(this), 3000);
@@ -382,11 +372,18 @@ colorDots.gameOver = function() { //GAME OVER
   this.$playAgain.on('click', this.reset.bind(this));
 };
 
+colorDots.resetScore = function() {
+  this.score = 0;
+  $('#score').html(this.score);
+};
+
 //SCORING SYSTEM
-colorDots.sortHighscore = function() { //To sort high score array
-  this.highScore.sort(function(a, b) {
-    return a-b;
-  });
+colorDots.checkHighscore = function() { //Set high score to local storage
+  console.log(window.localStorage);
+  if (window.localStorage.highScore) {
+    if (this.score > parseInt(window.localStorage.highScore)) window.localStorage.highScore = this.score;
+  } else window.localStorage.setItem('highScore', this.score);
+  this.$highScoreH3.html(window.localStorage.highScore);
 };
 
 colorDots.bringLivesBack = function() { //Makes Lives go back to 3
@@ -399,6 +396,7 @@ colorDots.pauseGame = function() {
     //stop the interval
     clearInterval(this.dotColors);
     clearInterval(this.bubbleIntervals);
+    clearTimeout(this.checkClickRemoveDiv);
     this.gamePaused = true;
     $(this.$pauseBtn).text('PAUSED');
   } else {
@@ -472,7 +470,7 @@ colorDots.init = function() {
   this.boardHeight = this.bodyHeight - this.otherAreaHeight - 20;
 
   this.elementSizes();
-  $( window ).resize(this.elementSizes);
+  $( window ).on('resize', this.elementSizes);
 
   //VARIABLE DECLARATION
   this.bounceInterval = setInterval(this.bounceLetters.bind(this), 200);

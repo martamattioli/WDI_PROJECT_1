@@ -41,6 +41,12 @@ i:hover {
 header {
   text-align: center;
   height: 71.27px;
+  max-width: 600px;
+  margin: auto;
+}
+
+header h1, header h3 {
+
 }
 
 h1 {
@@ -129,6 +135,8 @@ header h3, header h1 {
 .game-area {
   padding-top: 0!important;
   padding-bottom: 0!important;
+  max-width: 600px;
+  display: block;
 }
 
 /* OTHER OPTIONS DIV */
@@ -214,10 +222,16 @@ h2 {
 .row {
   text-align: left;
   padding: 20px 5%;
+  position: relative;
+  height: 100px;
 }
 
 .instructions p {
   display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /*padding-left: 5%;*/
 }
 
 .number {
@@ -239,7 +253,7 @@ h2 {
 
 .text {
   width: 89%;
-  padding-left: 5%;
+  padding-left: 105px;
   font-size: 25px;
 }
 
@@ -291,12 +305,17 @@ h2 {
   }
 
   /*INSTRUCTIONS AREA*/
+  .row {
+    height: 70px;
+  }
+
   .number {
     font-size: 30px;
   }
 
   .text {
     font-size: 16px;
+    padding-left: 65px;
   }
 
   /*GAME OVER AREA*/
