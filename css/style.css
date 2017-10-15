@@ -40,13 +40,9 @@ i:hover {
 
 header {
   text-align: center;
-  height: 71.27px;
+  height: 12vh;
   max-width: 600px;
   margin: auto;
-}
-
-header h1, header h3 {
-
 }
 
 h1 {
@@ -136,7 +132,8 @@ header h3, header h1 {
   padding-top: 0!important;
   padding-bottom: 0!important;
   max-width: 600px;
-  display: block;
+  margin: auto;
+  /*display: block;*/
 }
 
 /* OTHER OPTIONS DIV */

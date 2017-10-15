@@ -65,7 +65,7 @@ colorDots.elementSizes = function() {
   $(colorDots.html).data('previous-overflow', colorDots.html.css('overflow'));
   $(colorDots.html).css('overflow', 'hidden');
   window.scrollTo(colorDots.scrollPosition[0], colorDots.scrollPosition[1]);
-
+  console.log($(this.$header).outerHeight());
   this.bodyHeight = this.viewportHeight - $(this.$header).outerHeight(); //DIVs height
   this.otherAreaHeight = this.viewportHeight * 0.15;
   this.boardHeight = this.viewportHeight - this.headerHeight - this.otherAreaHeight - 20;
